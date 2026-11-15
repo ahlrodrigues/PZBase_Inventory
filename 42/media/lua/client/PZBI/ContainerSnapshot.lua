@@ -1,7 +1,9 @@
--- PZBase Inventory (cliente): envia o instantâneo do contêiner ao fechar a interface.
--- Confirmado no código do jogo: ISInventoryPage:close() e self.inventoryPane.inventory.
--- A validar em jogo: origem da posição (getSourceGrid) e tipo do objeto (getParent).
--- Versão de diagnóstico (v0.1.1): imprime cada etapa para descobrir onde o envio para.
+-- PZBase Inventory (cliente): envia o instantâneo do contêiner ao fechar a janela.
+-- Achado no código do jogo: ISPanel:close() apenas chama self:setVisible(false), e a
+-- janela de contêiner também pode ser escondida direto com setVisible(false).
+-- Por isso o hook fica em setVisible, que cobre os dois caminhos.
+-- A validar em jogo: getSourceGrid() e getParent() para contêineres de mundo.
+-- Versão de diagnóstico (v0.1.2): imprime cada etapa com prefixo [PZBI] diag.
 
 require "PZBI/Config"
 
@@ -61,11 +63,13 @@ local function sendSnapshot(playerIndex, container)
     print("[PZBI] enviado: " .. tostring(objectType) .. " em " .. grid:getX() .. "," .. grid:getY() .. "," .. grid:getZ())
 end
 
--- Hook: envolve o método original de fechamento sem substituí-lo.
-local originalClose = ISInventoryPage.close
-function ISInventoryPage:close()
-    print("[PZBI] diag: hook ISInventoryPage:close chamado")
-    local container = self.inventoryPane and self.inventoryPane.inventory
-    sendSnapshot(self.player, container)
-    originalClose(self)
+-- Hook: envolve setVisible sem substituí-lo. Ao esconder a janela, envia o instantâneo.
+local originalSetVisible = ISInventoryPage.setVisible
+function ISInventoryPage:setVisible(bVisible, ...)
+    if not bVisible then
+        print("[PZBI] diag: setVisible(false) chamado na janela de inventario")
+        local container = self.inventoryPane and self.inventoryPane.inventory
+        sendSnapshot(self.player, container)
+    end
+    return originalSetVisible(self, bVisible, ...)
 end
