@@ -6,6 +6,7 @@
 -- Versão de diagnóstico (v0.1.2): imprime cada etapa com prefixo [PZBI] diag.
 
 require "PZBI/Config"
+print("[PZBI] client: ContainerSnapshot carregado")
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"

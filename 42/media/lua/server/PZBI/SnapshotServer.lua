@@ -3,6 +3,7 @@
 -- Dados separados por contêiner: cada contêiner tem seu próprio ModData, pois a sincronização envia a tabela inteira.
 
 require "PZBI/Config"
+print("[PZBI] server: SnapshotServer carregado")
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"
