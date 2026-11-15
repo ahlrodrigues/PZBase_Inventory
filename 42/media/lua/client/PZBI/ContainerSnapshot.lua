@@ -44,7 +44,8 @@ local function sendSnapshot(playerIndex, container)
     local parent = container:getParent()
     print("[PZBI] diag: parent=" .. tostring(parent))
     if not parent then return end
-    local objectType = parent:getObjectName()
+    local sprite = parent:getSprite()
+    local objectType = (sprite and sprite:getName()) or parent:getObjectName()
     print("[PZBI] diag: objectType=" .. tostring(objectType))
 
     local playerObj = getSpecificPlayer(playerIndex)

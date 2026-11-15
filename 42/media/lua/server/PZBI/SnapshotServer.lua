@@ -1,6 +1,7 @@
 -- PZBase Inventory (servidor): recebe instantâneos, valida, compara com o último estado e grava no ModData.
 -- Regra da especificação: toda mudança é registrada, mesmo que quem mexeu não esteja inscrito.
 -- Dados separados por contêiner: cada contêiner tem seu próprio ModData, pois a sincronização envia a tabela inteira.
+-- Versão de diagnóstico (v0.1.4): log indica primeira leitura e lista cada tipo alterado.
 
 require "PZBI/Config"
 print("[PZBI] server: SnapshotServer carregado")
@@ -60,6 +61,7 @@ local function onSnapshot(player, args)
 
     local key = containerKey(args.x, args.y, args.z, args.objectType)
     local record = ModData.getOrCreate(key)
+    local firstRead = record.items == nil
     local changes = diff(record.items, args.items)
 
     record.items = args.items
@@ -70,7 +72,13 @@ local function onSnapshot(player, args)
 
     -- Envia a tabela deste contêiner aos clientes.
     ModData.transmit(key)
-    print("[PZBI] instantâneo " .. key .. " por " .. record.updatedBy .. ": " .. #changes .. " mudança(s)")
+
+    local label = firstRead and " (primeira leitura, sem estado anterior)" or ""
+    print("[PZBI] instantâneo " .. key .. " por " .. record.updatedBy .. label .. ": " .. #changes .. " tipo(s) alterado(s)")
+    for _, c in ipairs(changes) do
+        local sign = c.delta > 0 and "+" or ""
+        print("[PZBI]   " .. sign .. c.delta .. " " .. c.type)
+    end
 end
 
 Events.OnClientCommand.Add(function(module, command, player, args)
