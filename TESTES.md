@@ -78,3 +78,10 @@ Substitui o teste 6. A marcação agora é feita arrastando sobre o chão, como 
 - **Passo C:** mantenha o nome "Base", clique em "Criar base". O personagem deve falar "Pedido de base enviado (Base)." e o log deve mostrar `[PZBI] base N criada por <seu nome> em 'Base'`.
 - **Passo D (sobreposição):** abra a ferramenta de novo, com outro nome (ex.: "Outra"), e arraste uma área que cruze a primeira. O log deve mostrar `[PZBI] base recusada: overlap`.
 - **Passo E (cidade duplicada):** repita o passo C com o mesmo nome "Base" e área diferente. O log deve mostrar `duplicate_city`.
+
+## Teste 8 (v0.1.9): ver bases
+
+- **Passo:** clique com o botão direito num tile e escolha "PZBI: ver bases".
+- **Esperado:** o personagem fala o total e a lista (cidade e dono), e as áreas das bases aparecem destacadas por alguns segundos.
+- **Sem bases:** o personagem fala "Nenhuma base marcada neste save."
+- **Se não aparecer nada:** envie as linhas `[PZBI]` do `console.txt` e diga se a fala apareceu.
