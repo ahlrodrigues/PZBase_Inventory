@@ -6,6 +6,7 @@
 -- Inscrição:
 --   - sem dono (fora de base) ou dono do próprio contêiner: inscrição direta, status "aberta";
 --   - com dono de outra pessoa: pedido, status "pendente", até o dono aprovar ou recusar.
+-- Depois de aprovado, record.approved[user] = true (status "aprovada" no painel).
 
 require "PZBI/Config"
 
@@ -33,6 +34,7 @@ end
 function R.ensure(record)
     record.subscribers = record.subscribers or {}
     record.requests = record.requests or {}
+    record.approved = record.approved or {}
     return record
 end
 
@@ -43,6 +45,7 @@ function R.subscribe(record, user, owner)
     if owner == nil or owner == user then
         record.subscribers[user] = true
         record.requests[user] = nil
+        record.approved[user] = nil
         return "aberta"
     end
     record.requests[user] = true
@@ -56,6 +59,7 @@ function R.approve(record, owner, approver, user)
     if not record.requests[user] then return false, "no_request" end
     record.requests[user] = nil
     record.subscribers[user] = true
+    record.approved[user] = true
     return true
 end
 
@@ -73,6 +77,7 @@ function R.unsubscribe(record, user)
     R.ensure(record)
     record.subscribers[user] = nil
     record.requests[user] = nil
+    record.approved[user] = nil
 end
 
 return R

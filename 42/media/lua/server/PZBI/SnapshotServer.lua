@@ -1,6 +1,7 @@
 -- PZBase Inventory (servidor): recebe instantâneos, valida, compara com o último estado e grava no ModData.
 -- Regra da especificação: toda mudança é registrada, mesmo que quem mexeu não esteja inscrito.
 -- Dados separados por contêiner: cada contêiner tem seu próprio ModData, pois a sincronização envia a tabela inteira.
+-- Índice de contêineres (CONTAINERS_KEY): lista as posições já lidas, para o painel do jogador (seção 7).
 -- O log indica primeira leitura e lista cada tipo alterado, com sinal.
 
 require "PZBI/Config"
@@ -8,6 +9,7 @@ print("[PZBI] server: SnapshotServer carregado")
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"
+local CONTAINERS_KEY = PZBI.MOD_DATA_KEY .. "_containers"
 local MAX_ITEM_TYPES = 500   -- limite de sanidade contra dados falsos
 local MAX_COUNT = 10000
 
@@ -67,8 +69,16 @@ local function onSnapshot(player, args)
     record.items = args.items
     record.updatedBy = player:getUsername()
     record.updatedAt = getGameTime():getWorldAgeHours()
+    record.updatedAtMs = getTimestampMs()
     record.dataVersion = PZBI.DATA_VERSION
     record.lastChanges = changes
+
+    -- Índice de contêineres lidos (posição e tipo), para o painel do jogador.
+    local index = ModData.getOrCreate(CONTAINERS_KEY)
+    if index[key] == nil then
+        index[key] = { x = args.x, y = args.y, z = args.z, objectType = args.objectType }
+        ModData.transmit(CONTAINERS_KEY)
+    end
 
     -- Envia a tabela deste contêiner aos clientes.
     ModData.transmit(key)

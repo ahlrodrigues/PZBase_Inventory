@@ -129,3 +129,13 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Esperado: a fala "Você tem 1 pedido(s) de inscrição pendente(s)..." aparece ao entrar.
 - Apague a base (PZBase > Apagar área) com um pedido pendente dentro dela.
 - Esperado: no log, `[PZBI] base N removida: pedido do dono ...`, e o pedido some do menu (e do ModData).
+
+## Teste 14 (v0.2.10): painel do jogador
+
+- Antes: marque uma base, deixe um contêiner dentro dela e abra o inventário desse contêiner (para gerar o instantâneo). Feche.
+- Abra o botão direito → "PZBase" → "Painel do jogador".
+- Esperado: janela com a seção "Contêineres" (local, estado "dono", "último instantâneo hoje") e "Itens por categoria" com quantidade e peso.
+- Confira se a mochila aparece no grupo "Mochila" com o peso dos itens.
+- Clique em "Exportar texto": a fala deve indicar Zomboid/Lua/PZBI_inventario.txt, e o arquivo deve existir com o mesmo texto.
+- Pontos a confirmar: peso e categoria vêm de APIs do jogo (podem aparecer como "peso desconhecido" ou "Outros"); a janela usa ISRichTextPanel.
+- Contêineres só aparecem depois do primeiro instantâneo (ao fechar o inventário dele).
