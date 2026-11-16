@@ -20,5 +20,11 @@
     "IGUI_PZBI_Unsubscribe": "Cancelar inscrição",
     "IGUI_PZBI_SubOpen": "Inscrição aberta.",
     "IGUI_PZBI_SubRequest": "Pedido enviado ao dono da base.",
-    "IGUI_PZBI_SubCancelled": "Inscrição cancelada."
+    "IGUI_PZBI_SubCancelled": "Inscrição cancelada.",
+    "IGUI_PZBI_Requests": "Pedidos de inscrição (%1)",
+    "IGUI_PZBI_RequestItem": "%1 em %2",
+    "IGUI_PZBI_Approve": "Aprovar",
+    "IGUI_PZBI_Deny": "Recusar",
+    "IGUI_PZBI_Approved": "Inscrição de %1 aprovada.",
+    "IGUI_PZBI_Denied": "Pedido de %1 recusado."
 }

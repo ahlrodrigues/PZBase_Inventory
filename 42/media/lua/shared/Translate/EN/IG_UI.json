@@ -20,5 +20,11 @@
     "IGUI_PZBI_Unsubscribe": "Cancel subscription",
     "IGUI_PZBI_SubOpen": "Subscription open.",
     "IGUI_PZBI_SubRequest": "Request sent to the base owner.",
-    "IGUI_PZBI_SubCancelled": "Subscription cancelled."
+    "IGUI_PZBI_SubCancelled": "Subscription cancelled.",
+    "IGUI_PZBI_Requests": "Subscription requests (%1)",
+    "IGUI_PZBI_RequestItem": "%1 in %2",
+    "IGUI_PZBI_Approve": "Approve",
+    "IGUI_PZBI_Deny": "Deny",
+    "IGUI_PZBI_Approved": "Subscription of %1 approved.",
+    "IGUI_PZBI_Denied": "Request from %1 denied."
 }

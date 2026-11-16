@@ -114,3 +114,11 @@ Clique com o botão direito num móvel com inventário (ex.: cômoda) → "PZBas
 - **Cancelar:** "Cancelar inscrição" → "Inscrição cancelada.".
 
 Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprovar pelo jogo.
+
+## Teste 12 (v0.2.8): aprovar pedidos de inscrição
+
+- Dois jogadores (ou troque de usuário no mesmo save, se possível): o jogador B pede inscrição num móvel dentro da base do jogador A.
+- O jogador A abre o botão direito → "PZBase" → "Pedidos de inscrição (1)" → "<B> em <cidade>" → "Aprovar".
+- Esperado: a fala "Inscrição de B aprovada." e no log `[PZBI] aprovacao de B por A`.
+- Recusar: mesmo caminho com "Recusar" → "Pedido de B recusado." e `[PZBI] recusa de B por A`.
+- Pedidos de bases apagadas somem da lista (são filtrados pela base atual).
