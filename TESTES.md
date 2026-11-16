@@ -187,3 +187,13 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - "Atualizar instantâneo" com a janela aberta: log `[PZBI] instantâneo ...` sem fechar a janela.
 - "Ver no painel do jogador": o painel abre filtrado só nos itens desse contêiner. "Todos os contêineres juntos" volta à lista completa.
 - Pontos a confirmar: posição dos botões no rodapé (podem sobrepor a interface do jogo) e tamanho do texto.
+
+## Teste 20 (v0.2.17): botão "Bases" e varredura
+
+- Abra o inventário do personagem: botão "Bases" no rodapé à esquerda.
+- Um clique: abre a janela padrão com os itens das bases (vazia se nenhum contêiner de base foi lido ainda).
+- Botão "Base: todas" troca o filtro para cada cidade e volta para todas.
+- Dois cliques seguidos no botão "Bases" (rápido): a fala indica quantos contêineres foram atualizados, e os contêineres de base carregados perto do personagem ficam destacados.
+- Fechar a lista: o destaque some.
+- Contêiner de base que você nunca abriu, mas que está carregado perto de você: deve aparecer no painel e na lista (sem loot novo gerado).
+- Pontos a confirmar: setHighlighted e setHighlightColor com self.player, ISInventoryPage:new sem zoom, e se contêineres nunca abertos mostram itens.

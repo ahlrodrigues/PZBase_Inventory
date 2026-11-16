@@ -21,6 +21,7 @@ Mod de qualidade de vida para **Project Zomboid (Build 42)**. Lista os itens da 
 | 5 | Notificar inscritos quando o contêiner muda | — | Não iniciado |
 | 6 | Inatividade do dono: base removida após N dias sem login | 0.2.4–0.2.5 | Validado em jogo (teste 10, com 0.001 dia) |
 | 7 | Painel do jogador: contêineres, itens por categoria, peso, busca, ordenação, exportação | 0.2.10–0.2.13 | Não testado em jogo (testes 14 a 16) |
+| 7 | Botão "Bases" no inventário do personagem: lista os itens das bases (filtro por base) na janela padrão; duplo clique varre os contêineres carregados perto do personagem e os destaca | 0.2.17 | Não testado em jogo (teste 20) |
 | — | Menus e textos em pt-BR e en (`IG_UI.json`) | 0.2.7 | Confirmação de carregamento pendente |
 
 ### Painel do jogador (seção 7)

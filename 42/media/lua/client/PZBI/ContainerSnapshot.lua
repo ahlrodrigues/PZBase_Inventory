@@ -71,6 +71,9 @@ local function sendSnapshot(playerIndex, container)
     })
 end
 
+-- Exposto para o BasesWindow.lua (varredura das bases).
+PZBI.sendSnapshot = sendSnapshot
+
 local function currentContainer(page)
     return page.inventoryPane and page.inventoryPane.inventory
 end

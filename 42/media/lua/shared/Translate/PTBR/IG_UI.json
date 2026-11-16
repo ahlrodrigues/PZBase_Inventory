@@ -56,5 +56,9 @@
     "IGUI_PZBI_PanelSortQty": "Ordenar por quantidade",
     "IGUI_PZBI_PanelAllContainers": "Todos os contêineres juntos",
     "IGUI_PZBI_ContainerSnapshot": "Atualizar instantâneo",
-    "IGUI_PZBI_ContainerPanel": "Ver no painel do jogador"
+    "IGUI_PZBI_ContainerPanel": "Ver no painel do jogador",
+    "IGUI_PZBI_BasesButton": "Bases",
+    "IGUI_PZBI_BasesFilter": "Base: %1",
+    "IGUI_PZBI_BasesAll": "Base: todas",
+    "IGUI_PZBI_BasesUpdated": "%1 contêiner(es) de base atualizado(s)."
 }
