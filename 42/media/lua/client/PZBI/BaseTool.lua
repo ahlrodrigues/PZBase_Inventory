@@ -86,6 +86,15 @@ end
 function ISBaseTool:onMouseUpOutside(x, y)
     if self.playerNum ~= 0 then return end
     self.dragging = false
+    self:restoreWorldMenu()
+end
+
+-- O jogo usa essa flag para bloquear o menu do mundo durante o arrasto (ver ISAddDesignationAnimalZoneUI).
+-- Precisa ser desfeita ao soltar o mouse ou ao fechar, senão o botão direito deixa de abrir o menu.
+function ISBaseTool:restoreWorldMenu()
+    if ISWorldObjectContextMenu then
+        ISWorldObjectContextMenu.disableWorldMenu = false
+    end
 end
 
 -- Desenha a área marcada com a cor da área dos animais.
@@ -128,6 +137,7 @@ function ISBaseTool:onCreate()
 end
 
 function ISBaseTool:close()
+    self:restoreWorldMenu()
     self:setVisible(false)
     self:removeFromUIManager()
     if ISBaseTool.instance == self then ISBaseTool.instance = nil end
