@@ -1,0 +1,19 @@
+{
+    "IGUI_PZBI_Menu": "PZBase",
+    "IGUI_PZBI_Create": "Criar área",
+    "IGUI_PZBI_View": "Ver áreas",
+    "IGUI_PZBI_Delete": "Apagar área",
+    "IGUI_PZBI_Cancel": "Cancelar",
+    "IGUI_PZBI_Save": "Salvar",
+    "IGUI_PZBI_CityName": "Nome da cidade",
+    "IGUI_PZBI_DragHint": "Arraste no chão para marcar a área.",
+    "IGUI_PZBI_DeleteHint": "Clique numa área sua para apagá-la.",
+    "IGUI_PZBI_NameTooLong": "Digite um nome de cidade com até %1 caracteres.",
+    "IGUI_PZBI_SentCreate": "Pedido de base enviado (%1).",
+    "IGUI_PZBI_NoBaseHere": "Nenhuma base aqui.",
+    "IGUI_PZBI_NotYours": "Só o dono pode apagar esta base.",
+    "IGUI_PZBI_ConfirmDelete": "Apagar a base '%1'?",
+    "IGUI_PZBI_SentDelete": "Pedido para apagar a base '%1' enviado.",
+    "IGUI_PZBI_NoBases": "Nenhuma base marcada neste save.",
+    "IGUI_PZBI_BaseCount": "%1 base(s): %2"
+}

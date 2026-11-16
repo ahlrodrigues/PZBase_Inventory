@@ -58,14 +58,14 @@ end
 function PZBI.showBases(player)
     local bases = PZBI.listBases()
     if #bases == 0 then
-        if player.Say then player:Say("Nenhuma base marcada neste save.") end
+        if player.Say then player:Say(getText("IGUI_PZBI_NoBases")) end
         return
     end
     local parts = {}
     for _, base in ipairs(bases) do
         table.insert(parts, base.city .. " (" .. tostring(base.owner) .. ")")
     end
-    if player.Say then player:Say(#bases .. " base(s): " .. table.concat(parts, "; ")) end
+    if player.Say then player:Say(getText("IGUI_PZBI_BaseCount", tostring(#bases), table.concat(parts, "; "))) end
     PZBI.setHighlight(bases, SHOW_FRAMES)
 end
 

@@ -1,7 +1,7 @@
 -- PZBase Inventory (cliente): menu de contexto "PZBase" com submenus.
 -- Submenus: Criar, Ver, Apagar (BaseTool/BaseViewer) e Cancelar quando houver ação pendente.
--- Rótulos sem acento: o texto com "á" saía cortado no submenu (causa a confirmar em jogo).
--- Status: criar/apagar testados em jogo; rótulos a confirmar.
+-- Textos vêm de Translate/<IDIOMA>/PZBI_UI.json (acentos preservados pelo próprio jogo).
+-- Status: criar/apagar testados em jogo; tradução a validar.
 
 require "PZBI/Config"
 require "ISUI/ISContextMenu"
@@ -10,21 +10,21 @@ Events.OnFillWorldObjectContextMenu.Add(function(playerIndex, context, worldObje
     local player = getSpecificPlayer(playerIndex)
     if not player then return end
 
-    local root = context:addOption("PZBase", worldObjects, nil)
+    local root = context:addOption(getText("IGUI_PZBI_Menu"), worldObjects, nil)
     local sub = ISContextMenu:getNew(context)
     context:addSubMenu(root, sub)
 
-    sub:addOption("Criar area", nil, function()
+    sub:addOption(getText("IGUI_PZBI_Create"), nil, function()
         PZBI.Tool.startCreate(player)
     end)
-    sub:addOption("Ver areas", nil, function()
+    sub:addOption(getText("IGUI_PZBI_View"), nil, function()
         PZBI.showBases(player)
     end)
-    sub:addOption("Apagar area", nil, function()
+    sub:addOption(getText("IGUI_PZBI_Delete"), nil, function()
         PZBI.Tool.startDelete(player)
     end)
     if PZBI.Tool.mode then
-        sub:addOption("Cancelar", nil, function()
+        sub:addOption(getText("IGUI_PZBI_Cancel"), nil, function()
             PZBI.Tool.cancel()
         end)
     end

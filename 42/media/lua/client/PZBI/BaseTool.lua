@@ -70,7 +70,7 @@ function T.startCreate(player)
     T.playerNum = player:getPlayerNum()
     T.z = player:getZ()
     T.mode = "create"
-    say("Arraste no chao para marcar a area.")
+    say(getText("IGUI_PZBI_DragHint"))
 end
 
 function T.startDelete(player)
@@ -80,7 +80,7 @@ function T.startDelete(player)
     T.z = player:getZ()
     T.mode = "delete"
     PZBI.setHighlight(PZBI.listBases(), nil)
-    say("Clique numa area sua para apaga-la.")
+    say(getText("IGUI_PZBI_DeleteHint"))
 end
 
 -- Janela de nome, aberta depois de soltar o arrasto.
@@ -101,12 +101,12 @@ function ISBaseNameWindow:createChildren()
     self.nameEntry:instantiate()
     self:addChild(self.nameEntry)
 
-    self.buttonSave = ISButton:new(10, self.height - 34, 120, 24, "Salvar", self, ISBaseNameWindow.save)
+    self.buttonSave = ISButton:new(10, self.height - 34, 120, 24, getText("IGUI_PZBI_Save"), self, ISBaseNameWindow.save)
     self.buttonSave:initialise()
     self.buttonSave:instantiate()
     self:addChild(self.buttonSave)
 
-    self.buttonCancel = ISButton:new(self.width - 130, self.height - 34, 120, 24, "Cancelar", self, ISBaseNameWindow.cancel)
+    self.buttonCancel = ISButton:new(self.width - 130, self.height - 34, 120, 24, getText("IGUI_PZBI_Cancel"), self, ISBaseNameWindow.cancel)
     self.buttonCancel:initialise()
     self.buttonCancel:instantiate()
     self:addChild(self.buttonCancel)
@@ -133,7 +133,7 @@ local function openNameWindow()
         function(city)
             city = city:match("^%s*(.-)%s*$")
             if #city == 0 or #city > MAX_CITY_LENGTH then
-                say("Digite um nome de cidade com ate " .. MAX_CITY_LENGTH .. " caracteres.")
+                say(getText("IGUI_PZBI_NameTooLong", tostring(MAX_CITY_LENGTH)))
                 return
             end
             local area = {
@@ -142,7 +142,7 @@ local function openNameWindow()
                 z = T.z,
             }
             sendClientCommand(T.player, CMD_MODULE, CMD_CREATE, { city = city, area = area })
-            say("Pedido de base enviado (" .. city .. ").")
+            say(getText("IGUI_PZBI_SentCreate", city))
             T.cancel()
         end,
         function() T.cancel() end)
@@ -160,7 +160,7 @@ local function onDeleteConfirm(target, button)
         return
     end
     sendClientCommand(T.player, CMD_MODULE, CMD_REMOVE, { id = T.pendingDelete.id })
-    say("Pedido para apagar a base '" .. T.pendingDelete.city .. "' enviado.")
+    say(getText("IGUI_PZBI_SentDelete", T.pendingDelete.city))
     T.pendingDelete = nil
     T.cancel()
 end
@@ -175,18 +175,18 @@ local function deleteAt(x, y)
         end
     end
     if not found then
-        say("Nenhuma base aqui.")
+        say(getText("IGUI_PZBI_NoBaseHere"))
         T.cancel()
         return
     end
     if found.owner ~= T.player:getUsername() then
-        say("So o dono pode apagar esta base.")
+        say(getText("IGUI_PZBI_NotYours"))
         T.cancel()
         return
     end
     T.pendingDelete = found
     local modal = ISModalDialog:new(getCore():getScreenWidth() / 2 - 175, getCore():getScreenHeight() / 2 - 75,
-        350, 150, "Apagar a base '" .. found.city .. "'?", true, T, onDeleteConfirm)
+        350, 150, getText("IGUI_PZBI_ConfirmDelete", found.city), true, T, onDeleteConfirm)
     modal:initialise()
     modal:addToUIManager()
 end
