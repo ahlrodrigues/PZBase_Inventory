@@ -1,11 +1,13 @@
 -- PZBase Inventory (cliente): painel do jogador (especificação, seção 7).
--- Duas colunas: contêineres (esquerda) e itens por categoria (direita). Busca por nome e ordenação.
+-- Coluna esquerda: botão "Todos os contêineres" e um botão por contêiner (filtra a coluna da direita),
+-- com os detalhes de estado e data logo abaixo. Coluna direita: itens por categoria, com busca e ordenação.
 -- Mostra a mochila e os contêineres a que o jogador tem acesso (dono da base ou inscrito).
 -- Regras puras em shared/PZBI/PlayerPanelRules.lua. Textos em IG_UI.json.
 -- Exporta a lista completa (sem filtro) para Zomboid/Lua/PZBI_inventario.txt.
 -- Status: NÃO testado em jogo. APIs de item (ScriptManager, getDisplayCategory, getActualWeight),
 --         ISRichTextPanel, ISTextEntryBox e getFileWriter precisam de confirmação; as de item estão em pcall.
--- Limitação: contêineres só entram no índice após o primeiro instantâneo (feito pelo painel de contêiner).
+-- Limitações: até MAX_BUTTONS contêineres ganham botão (os demais aparecem só nos detalhes);
+--             contêineres só entram no índice após o primeiro instantâneo.
 
 require "PZBI/Config"
 require "PZBI/ContainerRules"
@@ -26,6 +28,9 @@ local WIN_W, WIN_H = 720, 500
 local LEFT_W = 240
 local TOP_Y = 60          -- linha dos botões de ordenação; busca fica na linha acima
 local COL_Y = 95
+local BTN_H = 25
+local BTN_GAP = 30
+local MAX_BUTTONS = 6     -- contêineres com botão próprio (o resto aparece só nos detalhes)
 
 -- Categoria traduzida se houver texto (IGUI_ItemCat_<cat>); senão, o nome cru.
 local function categoryLabel(cat)
@@ -83,6 +88,7 @@ local function backpackEntries(player, labels)
 end
 
 -- Contêineres a que o jogador tem acesso: os que estão na base dele, ou em que ele está inscrito.
+-- Cada contêiner e cada item de contêiner leva o ckey (chave do ModData), para o filtro por botão.
 local function containerData(player, labels)
     local user = player:getUsername()
     local nowMs = getTimestampMs()
@@ -109,6 +115,7 @@ local function containerData(player, labels)
                 state = labels.statePending
             end
             table.insert(containers, {
+                key = key,
                 location = place,
                 state = state,
                 days = R.daysSince(record.updatedAtMs, nowMs),
@@ -116,7 +123,7 @@ local function containerData(player, labels)
             for _, it in ipairs(record.items or {}) do
                 local info = typeInfo(it.type)
                 table.insert(entries, {
-                    category = info.category, name = info.name, count = it.count,
+                    ckey = key, category = info.category, name = info.name, count = it.count,
                     unitWeight = info.unitWeight, location = place,
                 })
             end
@@ -156,22 +163,42 @@ local function exportReport(text)
     return true
 end
 
--- Redesenha as duas colunas a partir dos dados guardados, aplicando busca e ordenação.
+-- Redesenha as colunas a partir dos dados guardados, aplicando contêiner, busca e ordenação.
 local function refresh()
     local data = Panel.data
     if not data or not Panel.window then return end
     local visible = R.filterEntries(data.entries, Panel.query)
+    visible = R.filterByContainer(visible, Panel.filterKey)
     local groups = R.groupByCategory(visible, Panel.sortKey)
     local containers = R.sortContainers(data.containers)
-    Panel.leftPanel:setText(R.containersText(containers, data.labels))
+    Panel.detailPanel:setText(R.containersText(containers, data.labels))
     Panel.rightPanel:setText(R.itemsText(groups, data.labels))
 end
 
 local function addButton(win, x, y, w, title, onClick)
-    local btn = ISButton:new(x, y, w, 25, title, nil, onClick)
+    local btn = ISButton:new(x, y, w, BTN_H, title, nil, onClick)
     btn:initialise()
     win:addChild(btn)
     return btn
+end
+
+-- Botões da coluna esquerda: "Todos" e um por contêiner (até MAX_BUTTONS). Devolve a linha em que os detalhes começam.
+local function buildContainerButtons(win, containers)
+    local y = COL_Y
+    addButton(win, 10, y, LEFT_W, getText("IGUI_PZBI_PanelAllContainers"), function()
+        Panel.filterKey = nil
+        refresh()
+    end)
+    y = y + BTN_GAP
+    for i, c in ipairs(containers) do
+        if i > MAX_BUTTONS then break end
+        addButton(win, 10, y, LEFT_W, c.location, function()
+            Panel.filterKey = c.key
+            refresh()
+        end)
+        y = y + BTN_GAP
+    end
+    return y
 end
 
 -- Abre (ou atualiza) a janela do painel.
@@ -182,6 +209,7 @@ function Panel.open(player)
     Panel.data = { containers = containers, entries = entries, labels = labels, player = player }
     Panel.query = ""
     Panel.sortKey = R.SORT_NAME
+    Panel.filterKey = nil
 
     if Panel.window then
         Panel.window:removeFromUIManager()
@@ -199,7 +227,7 @@ function Panel.open(player)
     Panel.window = win
 
     -- Busca: campo + filtrar + limpar.
-    local search = ISTextEntryBox:new("", 10, 30, 340, 25)
+    local search = ISTextEntryBox:new("", 10, 30, 340, BTN_H)
     search:initialise()
     search:instantiate()
     win:addChild(search)
@@ -224,14 +252,15 @@ function Panel.open(player)
         refresh()
     end)
 
-    -- Coluna esquerda: contêineres. Coluna direita: itens por categoria.
-    local leftPanel = ISRichTextPanel:new(10, COL_Y, LEFT_W, WIN_H - COL_Y - 60)
-    leftPanel:initialise()
-    leftPanel:instantiate()
-    leftPanel.autosetheight = false
-    leftPanel:addScrollBars()
-    win:addChild(leftPanel)
-    Panel.leftPanel = leftPanel
+    -- Coluna esquerda: botões dos contêineres e, abaixo, os detalhes. Coluna direita: itens.
+    local detailTop = buildContainerButtons(win, R.sortContainers(containers))
+    local detailPanel = ISRichTextPanel:new(10, detailTop, LEFT_W, WIN_H - detailTop - 60)
+    detailPanel:initialise()
+    detailPanel:instantiate()
+    detailPanel.autosetheight = false
+    detailPanel:addScrollBars()
+    win:addChild(detailPanel)
+    Panel.detailPanel = detailPanel
 
     local rightPanel = ISRichTextPanel:new(10 + LEFT_W + 10, COL_Y, WIN_W - LEFT_W - 40, WIN_H - COL_Y - 60)
     rightPanel:initialise()

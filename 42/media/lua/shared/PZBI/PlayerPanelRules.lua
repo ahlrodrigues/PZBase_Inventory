@@ -31,6 +31,16 @@ function P.filterEntries(entries, query)
     return kept
 end
 
+-- Mantém só os itens de um contêiner (pelo ckey). Sem ckey, devolve todos.
+function P.filterByContainer(entries, ckey)
+    if ckey == nil then return entries end
+    local kept = {}
+    for _, e in ipairs(entries) do
+        if e.ckey == ckey then table.insert(kept, e) end
+    end
+    return kept
+end
+
 -- Ordena contêineres por local e depois por estado.
 function P.sortContainers(containers)
     local sorted = {}

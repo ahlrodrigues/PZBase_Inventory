@@ -148,3 +148,12 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - "Ordenar por quantidade": dentro de cada categoria, o maior número de unidades vem primeiro.
 - Exportar: o arquivo deve conter a lista completa, mesmo com filtro ativo.
 - Pontos a confirmar: ISTextEntryBox (getText) e ISRichTextPanel no jogo.
+
+## Teste 16 (v0.2.12): botões de contêiner no painel
+
+- Abra "Painel do jogador" com pelo menos dois contêineres (um na sua base e outro em que está inscrito).
+- Esquerda: primeiro botão "Todos os contêineres juntos", depois um botão por contêiner, com o local.
+- Clique num contêiner: a coluna da direita deve mostrar só os itens dele (sem a mochila).
+- Clique em "Todos os contêineres juntos": volta a mostrar tudo, incluindo a mochila.
+- Busca e ordenação continuam valendo dentro do contêiner escolhido.
+- Pontos a confirmar: o texto do botão é o local (ex.: "Base A / Armário"), que pode ser longo para a largura do botão; até 6 contêineres ganham botão.

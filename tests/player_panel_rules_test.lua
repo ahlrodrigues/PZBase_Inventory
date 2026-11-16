@@ -47,6 +47,13 @@ check("peso total soma unidade × quantidade", math.abs(groups[2].weightTotal - 
 check("peso desconhecido marca o grupo como parcial", groups[1].weightUnknown == true)
 check("grupo sem peso desconhecido não é parcial", groups[2].weightUnknown == false)
 
+-- Filtro por contêiner
+local byKey = {
+    { name = "a", ckey = "k1" }, { name = "b", ckey = "k2" }, { name = "c" },
+}
+check("filtro por contêiner mantém só o escolhido", #P.filterByContainer(byKey, "k1") == 1)
+check("filtro por contêiner sem escolha devolve tudo", #P.filterByContainer(byKey, nil) == 3)
+
 -- Contêineres
 local sorted = P.sortContainers({
     { location = "Base B / Caixa", state = "aberta", days = 1 },
