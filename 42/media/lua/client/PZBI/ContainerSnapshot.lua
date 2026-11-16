@@ -68,6 +68,29 @@ end
 -- Exposto para o BasesWindow.lua (varredura das bases).
 PZBI.sendSnapshot = sendSnapshot
 
+-- Última assinatura enviada por contêiner, para não reenviar sem mudança.
+local lastSent = {}
+
+-- Envia o instantâneo só se os itens mudaram desde o último envio. Devolve true se enviou.
+local function sendSnapshotIfChanged(playerIndex, container)
+    local info = worldInfo(container)
+    if not insideBase(info) then return false end
+    local counts = collectItems(container)
+    local parts = {}
+    for fullType, count in pairs(counts) do
+        table.insert(parts, fullType .. ":" .. count)
+    end
+    table.sort(parts)
+    local sig = table.concat(parts, "|")
+    local key = PZBI.ContainerRules.containerKey(info.x, info.y, info.z, info.objectType)
+    if lastSent[key] == sig then return false end
+    lastSent[key] = sig
+    sendSnapshot(playerIndex, container)
+    return true
+end
+
+PZBI.sendSnapshotIfChanged = sendSnapshotIfChanged
+
 -- Hook: envolve setVisible sem substituí-lo. Ao esconder uma janela de contêiner, envia o instantâneo.
 local originalSetVisible = ISInventoryPage.setVisible
 function ISInventoryPage:setVisible(bVisible, ...)

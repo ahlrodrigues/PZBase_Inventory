@@ -1,6 +1,6 @@
 name=PZBase Inventory
 id=PZBaseInventory
 description=Inventário das bases: marca a área no chão e reúne os itens dos contêineres dentro dela, com painel do jogador e busca. Em desenvolvimento.
-modversion=0.2.18
+modversion=0.2.19
 versionMin=42.0
 poster=poster.png

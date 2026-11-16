@@ -61,6 +61,12 @@ Regras: você tem **uma base por cidade**, e as bases não podem se sobrepor no 
 Ao fechar a janela de um contêiner dentro de base, o mod envia o estado dele ao servidor. Não há botões
 na janela do contêiner: toda a interação fica no inventário do personagem.
 
+### Leitura por proximidade
+
+Quando você está na base ou a até 12 tiles dela, o mod lê os contêineres carregados dentro da área marcada,
+sem abri-los. Ele envia só os que mudaram desde a última leitura, no máximo uma varredura a cada 3 segundos.
+Contêineres fora da área carregada (longe de você) não são lidos.
+
 ### Inscrições
 
 Só valem para contêineres dentro de base:
