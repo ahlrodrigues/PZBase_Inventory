@@ -100,5 +100,6 @@ Se o clique direito deixar de abrir o menu, anote e envie o log.
 ## Teste 10 (v0.2.4): rótulo do nome e inatividade do dono
 
 - **Rótulo:** a janela de nome mostra "Nome da cidade" (ou "City name" em inglês).
-- **Inatividade (teste rápido):** temporariamente, em `42/media/lua/shared/PZBI/Config.lua`, troque `PZBI.INACTIVITY_DAYS = 30` por `0.05` (cerca de 1,2 hora de jogo). Crie uma base, deixe o jogo rodar por algumas horas e espere o próximo ciclo. O log deve mostrar `[PZBI] base N removida: dono inativo desde ...`. Como o jogador local é marcado como ativo a cada hora, a remoção só deve ocorrer se o dono ficar sem entrar no save. **Restaure para 30 depois do teste.**
+- **Inatividade (tempo real, teste rápido):** temporariamente, em `42/media/lua/shared/PZBI/Config.lua`, troque `PZBI.INACTIVITY_DAYS = 30` por `0.001` (cerca de 1,5 minuto real). Crie uma base, saia do jogo e espere pelo menos 2 minutos. Entre de novo no mesmo save. Antes de registrar o seu login, o jogo verifica o login anterior e deve remover a base. O log deve mostrar `[PZBI] base N removida: dono sem login ha X dias`. **Restaure para 30 depois do teste.**
+- **Atenção:** em solo, o dono é sempre o jogador que carrega o save. Então a remoção só deve acontecer ao voltar depois do prazo, como no passo acima.
 - Se a base for removida enquanto o jogo roda normal, envie as linhas `[PZBI]` do `console.txt`.

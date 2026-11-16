@@ -50,7 +50,7 @@ local function onCreate(player, args)
     record.owner = owner
     record.city = clean.city
     record.area = clean.area
-    record.createdAt = getGameTime():getWorldAgeHours()
+    record.createdAt = getTimestampMs()
     record.dataVersion = PZBI.DATA_VERSION
     record.removed = false
 
