@@ -87,6 +87,9 @@ local function onRemove(player, args)
     print("[PZBI] base " .. target.id .. " removida por " .. player:getUsername())
 end
 
+-- Exposta para outros módulos do servidor (ex.: Subscriptions.lua).
+PZBI.loadActiveBases = loadActiveBases
+
 -- Remoção compartilhada (pedido do dono ou inatividade). Mantém o registro, marcado como removido.
 function PZBI.removeBase(record, reason)
     local index = ModData.getOrCreate(INDEX_KEY)

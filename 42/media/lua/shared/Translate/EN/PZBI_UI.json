@@ -15,5 +15,10 @@
     "IGUI_PZBI_ConfirmDelete": "Delete base '%1'?",
     "IGUI_PZBI_SentDelete": "Delete request for base '%1' sent.",
     "IGUI_PZBI_NoBases": "No bases marked in this save.",
-    "IGUI_PZBI_BaseCount": "%1 base(s): %2"
+    "IGUI_PZBI_BaseCount": "%1 base(s): %2",
+    "IGUI_PZBI_Subscribe": "Subscribe to this furniture",
+    "IGUI_PZBI_Unsubscribe": "Cancel subscription",
+    "IGUI_PZBI_SubOpen": "Subscription open.",
+    "IGUI_PZBI_SubRequest": "Request sent to the base owner.",
+    "IGUI_PZBI_SubCancelled": "Subscription cancelled."
 }

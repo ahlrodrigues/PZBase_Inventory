@@ -103,3 +103,14 @@ Se o clique direito deixar de abrir o menu, anote e envie o log.
 - **Inatividade (tempo real, teste rápido):** temporariamente, em `42/media/lua/shared/PZBI/Config.lua`, troque `PZBI.INACTIVITY_DAYS = 30` por `0.001` (cerca de 1,5 minuto real). Crie uma base, saia do jogo e espere pelo menos 2 minutos. Entre de novo no mesmo save. Antes de registrar o seu login, o jogo verifica o login anterior e deve remover a base. O log deve mostrar `[PZBI] base N removida: dono sem login ha X dias`. **Restaure para 30 depois do teste.**
 - **Atenção:** em solo, o dono é sempre o jogador que carrega o save. Então a remoção só deve acontecer ao voltar depois do prazo, como no passo acima.
 - Se a base for removida enquanto o jogo roda normal, envie as linhas `[PZBI]` do `console.txt`.
+
+## Teste 11 (v0.2.6): inscrições em móveis
+
+Clique com o botão direito num móvel com inventário (ex.: cômoda) → "PZBase" → "Inscrever neste móvel".
+
+- **Fora de base:** deve falar "Inscrição aberta.".
+- **Dentro da sua base:** também "Inscrição aberta.".
+- **Dentro da base de outro jogador:** "Pedido enviado ao dono da base.". No log do servidor: `[PZBI] inscricao pendente: ...`.
+- **Cancelar:** "Cancelar inscrição" → "Inscrição cancelada.".
+
+Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprovar pelo jogo.
