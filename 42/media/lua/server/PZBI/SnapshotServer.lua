@@ -1,7 +1,7 @@
 -- PZBase Inventory (servidor): recebe instantâneos, valida, compara com o último estado e grava no ModData.
 -- Regra da especificação: toda mudança é registrada, mesmo que quem mexeu não esteja inscrito.
 -- Dados separados por contêiner: cada contêiner tem seu próprio ModData, pois a sincronização envia a tabela inteira.
--- Versão de diagnóstico (v0.1.4): log indica primeira leitura e lista cada tipo alterado.
+-- O log indica primeira leitura e lista cada tipo alterado, com sinal.
 
 require "PZBI/Config"
 print("[PZBI] server: SnapshotServer carregado")

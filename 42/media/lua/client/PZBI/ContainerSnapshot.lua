@@ -2,11 +2,10 @@
 -- Achado no código do jogo: ISPanel:close() apenas chama self:setVisible(false), e a
 -- janela de contêiner também pode ser escondida direto com setVisible(false).
 -- Por isso o hook fica em setVisible, que cobre os dois caminhos.
--- A validar em jogo: getSourceGrid() e getParent() para contêineres de mundo.
--- Versão de diagnóstico (v0.1.2): imprime cada etapa com prefixo [PZBI] diag.
+-- Validado em jogo (v0.1.4): contêineres de mundo (móveis) retornam grid e objeto pai.
+-- Ainda não lidos: contêineres de veículo e o inventário do jogador (sem posição).
 
 require "PZBI/Config"
-print("[PZBI] client: ContainerSnapshot carregado")
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"
@@ -34,25 +33,18 @@ end
 
 -- Envia o instantâneo se o contêiner tiver posição conhecida (contêiner de mundo).
 local function sendSnapshot(playerIndex, container)
-    print("[PZBI] diag: container=" .. tostring(container))
     if not container then return end
 
     local grid = container:getSourceGrid()
-    print("[PZBI] diag: grid=" .. tostring(grid))
     if not grid then return end
 
     local parent = container:getParent()
-    print("[PZBI] diag: parent=" .. tostring(parent))
     if not parent then return end
     local sprite = parent:getSprite()
     local objectType = (sprite and sprite:getName()) or parent:getObjectName()
-    print("[PZBI] diag: objectType=" .. tostring(objectType))
 
     local playerObj = getSpecificPlayer(playerIndex)
-    if not playerObj then
-        print("[PZBI] diag: jogador nao encontrado no indice " .. tostring(playerIndex))
-        return
-    end
+    if not playerObj then return end
 
     local items = collectItems(container)
     sendClientCommand(playerObj, CMD_MODULE, CMD_SNAPSHOT, {
@@ -62,14 +54,12 @@ local function sendSnapshot(playerIndex, container)
         objectType = objectType,
         items = toList(items),
     })
-    print("[PZBI] enviado: " .. tostring(objectType) .. " em " .. grid:getX() .. "," .. grid:getY() .. "," .. grid:getZ())
 end
 
 -- Hook: envolve setVisible sem substituí-lo. Ao esconder a janela, envia o instantâneo.
 local originalSetVisible = ISInventoryPage.setVisible
 function ISInventoryPage:setVisible(bVisible, ...)
     if not bVisible then
-        print("[PZBI] diag: setVisible(false) chamado na janela de inventario")
         local container = self.inventoryPane and self.inventoryPane.inventory
         sendSnapshot(self.player, container)
     end
