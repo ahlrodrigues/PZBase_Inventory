@@ -157,3 +157,9 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Clique em "Todos os contêineres juntos": volta a mostrar tudo, incluindo a mochila.
 - Busca e ordenação continuam valendo dentro do contêiner escolhido.
 - Pontos a confirmar: o texto do botão é o local (ex.: "Base A / Armário"), que pode ser longo para a largura do botão; até 6 contêineres ganham botão.
+
+## Atualização do teste 16 (v0.2.13)
+
+- Os contêineres agora ficam numa barra vertical com rolagem, sem o limite de 6 botões.
+- Teste: com mais de 6 contêineres, role a barra até o último, clique nele e confira o filtro da coluna da direita.
+- Pontos a confirmar: ISScrollingListBox (setOnMouseDownFunction e addItem) e o tamanho da barra.

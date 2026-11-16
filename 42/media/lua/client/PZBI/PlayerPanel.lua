@@ -1,13 +1,12 @@
 -- PZBase Inventory (cliente): painel do jogador (especificação, seção 7).
--- Coluna esquerda: botão "Todos os contêineres" e um botão por contêiner (filtra a coluna da direita),
+-- Coluna esquerda: botão "Todos os contêineres" e uma barra vertical com rolagem (filtra a coluna da direita),
 -- com os detalhes de estado e data logo abaixo. Coluna direita: itens por categoria, com busca e ordenação.
 -- Mostra a mochila e os contêineres a que o jogador tem acesso (dono da base ou inscrito).
 -- Regras puras em shared/PZBI/PlayerPanelRules.lua. Textos em IG_UI.json.
 -- Exporta a lista completa (sem filtro) para Zomboid/Lua/PZBI_inventario.txt.
 -- Status: NÃO testado em jogo. APIs de item (ScriptManager, getDisplayCategory, getActualWeight),
 --         ISRichTextPanel, ISTextEntryBox e getFileWriter precisam de confirmação; as de item estão em pcall.
--- Limitações: até MAX_BUTTONS contêineres ganham botão (os demais aparecem só nos detalhes);
---             contêineres só entram no índice após o primeiro instantâneo.
+-- Limitação: contêineres só entram no índice após o primeiro instantâneo.
 
 require "PZBI/Config"
 require "PZBI/ContainerRules"
@@ -16,6 +15,7 @@ require "ISUI/ISCollapsableWindow"
 require "ISUI/ISRichTextPanel"
 require "ISUI/ISTextEntryBox"
 require "ISUI/ISButton"
+require "ISUI/ISScrollingListBox"
 
 PZBI = PZBI or {}
 PZBI.PlayerPanel = PZBI.PlayerPanel or {}
@@ -30,7 +30,7 @@ local TOP_Y = 60          -- linha dos botões de ordenação; busca fica na lin
 local COL_Y = 95
 local BTN_H = 25
 local BTN_GAP = 30
-local MAX_BUTTONS = 6     -- contêineres com botão próprio (o resto aparece só nos detalhes)
+local LIST_H = 160        -- altura da barra vertical de contêineres (com rolagem)
 
 -- Categoria traduzida se houver texto (IGUI_ItemCat_<cat>); senão, o nome cru.
 local function categoryLabel(cat)
@@ -182,23 +182,28 @@ local function addButton(win, x, y, w, title, onClick)
     return btn
 end
 
--- Botões da coluna esquerda: "Todos" e um por contêiner (até MAX_BUTTONS). Devolve a linha em que os detalhes começam.
-local function buildContainerButtons(win, containers)
-    local y = COL_Y
-    addButton(win, 10, y, LEFT_W, getText("IGUI_PZBI_PanelAllContainers"), function()
+-- Coluna esquerda: botão "Todos" e uma barra vertical com rolagem listando todos os contêineres.
+-- Clicar num contêiner filtra a coluna da direita. Devolve a linha em que os detalhes começam.
+local function buildContainerList(win, containers)
+    addButton(win, 10, COL_Y, LEFT_W, getText("IGUI_PZBI_PanelAllContainers"), function()
         Panel.filterKey = nil
         refresh()
     end)
-    y = y + BTN_GAP
-    for i, c in ipairs(containers) do
-        if i > MAX_BUTTONS then break end
-        addButton(win, 10, y, LEFT_W, c.location, function()
-            Panel.filterKey = c.key
-            refresh()
-        end)
-        y = y + BTN_GAP
+    local listY = COL_Y + BTN_GAP
+    local list = ISScrollingListBox:new(10, listY, LEFT_W, LIST_H)
+    list:initialise()
+    list:instantiate()
+    list.itemheight = BTN_GAP
+    list.drawBorder = true
+    list:setOnMouseDownFunction(Panel, function(_, item)
+        Panel.filterKey = item.key
+        refresh()
+    end)
+    for _, c in ipairs(containers) do
+        list:addItem(c.location, c)
     end
-    return y
+    win:addChild(list)
+    return listY + LIST_H + 5
 end
 
 -- Abre (ou atualiza) a janela do painel.
@@ -253,7 +258,7 @@ function Panel.open(player)
     end)
 
     -- Coluna esquerda: botões dos contêineres e, abaixo, os detalhes. Coluna direita: itens.
-    local detailTop = buildContainerButtons(win, R.sortContainers(containers))
+    local detailTop = buildContainerList(win, R.sortContainers(containers))
     local detailPanel = ISRichTextPanel:new(10, detailTop, LEFT_W, WIN_H - detailTop - 60)
     detailPanel:initialise()
     detailPanel:instantiate()
