@@ -5,12 +5,14 @@
 
 require "PZBI/Config"
 require "PZBI/BaseRules"
+require "PZBI/ContainerRules"
 print("[PZBI] server: BaseServer carregado")
 
 local CMD_MODULE = "PZBI"
 local CMD_CREATE = "createBase"
 local CMD_REMOVE = "removeBase"
 local INDEX_KEY = PZBI.MOD_DATA_KEY .. "_bases"
+local REQUESTS_KEY = PZBI.MOD_DATA_KEY .. "_requests"
 
 local function baseKey(id)
     return PZBI.MOD_DATA_KEY .. "_base_" .. tostring(id)
@@ -65,7 +67,7 @@ local function onRemove(player, args)
         return
     end
 
-    local bases, index = loadActiveBases()
+    local bases = loadActiveBases()
     local target
     for _, base in ipairs(bases) do
         if base.id == args.id then target = base end
@@ -75,20 +77,26 @@ local function onRemove(player, args)
         return
     end
 
-    target.removed = true
-    local remaining = {}
-    for _, id in ipairs(index.ids) do
-        if id ~= target.id then table.insert(remaining, id) end
-    end
-    index.ids = remaining
-
-    ModData.transmit(baseKey(target.id))
-    ModData.transmit(INDEX_KEY)
-    print("[PZBI] base " .. target.id .. " removida por " .. player:getUsername())
+    PZBI.removeBase(target, "pedido do dono " .. player:getUsername())
 end
 
 -- Exposta para outros módulos do servidor (ex.: Subscriptions.lua).
 PZBI.loadActiveBases = loadActiveBases
+
+-- Apaga pedidos de inscrição cujo contêiner já não está em nenhuma base ativa.
+local function purgeOrphanRequests()
+    local requests = ModData.get(REQUESTS_KEY)
+    if not requests then return end
+    local bases = loadActiveBases()
+    local changed = false
+    for key, req in pairs(requests) do
+        if PZBI.ContainerRules.findOwnerBase(bases, req.x, req.y, req.z) == nil then
+            requests[key] = nil
+            changed = true
+        end
+    end
+    if changed then ModData.transmit(REQUESTS_KEY) end
+end
 
 -- Remoção compartilhada (pedido do dono ou inatividade). Mantém o registro, marcado como removido.
 function PZBI.removeBase(record, reason)
@@ -102,6 +110,7 @@ function PZBI.removeBase(record, reason)
     record.removed = true
     ModData.transmit(baseKey(record.id))
     ModData.transmit(INDEX_KEY)
+    purgeOrphanRequests()
     print("[PZBI] base " .. record.id .. " removida: " .. reason)
 end
 

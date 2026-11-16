@@ -26,5 +26,6 @@
     "IGUI_PZBI_Approve": "Aprovar",
     "IGUI_PZBI_Deny": "Recusar",
     "IGUI_PZBI_Approved": "Inscrição de %1 aprovada.",
-    "IGUI_PZBI_Denied": "Pedido de %1 recusado."
+    "IGUI_PZBI_Denied": "Pedido de %1 recusado.",
+    "IGUI_PZBI_PendingOnLogin": "Você tem %1 pedido(s) de inscrição pendente(s). Veja em PZBase > Pedidos de inscrição."
 }

@@ -122,3 +122,10 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Esperado: a fala "Inscrição de B aprovada." e no log `[PZBI] aprovacao de B por A`.
 - Recusar: mesmo caminho com "Recusar" → "Pedido de B recusado." e `[PZBI] recusa de B por A`.
 - Pedidos de bases apagadas somem da lista (são filtrados pela base atual).
+
+## Teste 13 (v0.2.9): aviso no login e limpeza de pedidos
+
+- Com um pedido pendente para o seu móvel, saia e entre no jogo como dono.
+- Esperado: a fala "Você tem 1 pedido(s) de inscrição pendente(s)..." aparece ao entrar.
+- Apague a base (PZBase > Apagar área) com um pedido pendente dentro dela.
+- Esperado: no log, `[PZBI] base N removida: pedido do dono ...`, e o pedido some do menu (e do ModData).

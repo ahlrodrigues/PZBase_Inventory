@@ -26,5 +26,6 @@
     "IGUI_PZBI_Approve": "Approve",
     "IGUI_PZBI_Deny": "Deny",
     "IGUI_PZBI_Approved": "Subscription of %1 approved.",
-    "IGUI_PZBI_Denied": "Request from %1 denied."
+    "IGUI_PZBI_Denied": "Request from %1 denied.",
+    "IGUI_PZBI_PendingOnLogin": "You have %1 pending subscription request(s). See PZBase > Subscription requests."
 }

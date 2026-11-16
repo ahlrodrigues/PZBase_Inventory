@@ -60,6 +60,8 @@ local function pendingRequestsFor(username)
     return list
 end
 
+PZBI.pendingRequestsFor = pendingRequestsFor
+
 local function decide(player, req, approve)
     local args = { x = req.x, y = req.y, z = req.z, objectType = req.objectType, user = req.user }
     sendClientCommand(player, CMD_MODULE, approve and "approve" or "deny", args)
