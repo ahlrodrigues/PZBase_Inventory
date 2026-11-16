@@ -85,3 +85,14 @@ Substitui o teste 6. A marcação agora é feita arrastando sobre o chão, como 
 - **Esperado:** o personagem fala o total e a lista (cidade e dono), e as áreas das bases aparecem destacadas por alguns segundos.
 - **Sem bases:** o personagem fala "Nenhuma base marcada neste save."
 - **Se não aparecer nada:** envie as linhas `[PZBI]` do `console.txt` e diga se a fala apareceu.
+
+## Teste 9 (v0.2.0): submenu PZBase
+
+Botão direito num tile → "PZBase" → submenus:
+
+- **Criar área:** arraste sobre o chão. A área aparece preenchida enquanto você arrasta. Ao soltar, abre a janela para nomear. "Salvar" envia; "Cancelar" descarta.
+- **Ver áreas:** lista as bases e destaca as áreas por alguns segundos.
+- **Apagar área:** clique numa área **sua**. Confirme no diálogo. Se a área for de outro jogador, a fala deve ser "Só o dono pode apagar esta base.".
+- **Cancelar:** aparece no submenu enquanto houver uma ação pendente.
+
+Se o clique direito deixar de abrir o menu, anote e envie o log.
