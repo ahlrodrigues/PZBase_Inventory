@@ -49,5 +49,9 @@
     "IGUI_PZBI_PanelStatePending": "approval pending",
     "IGUI_PZBI_PanelExport": "Export text",
     "IGUI_PZBI_PanelExported": "List exported to Zomboid/Lua/%1.",
-    "IGUI_PZBI_PanelExportFailed": "Could not export the list."
+    "IGUI_PZBI_PanelExportFailed": "Could not export the list.",
+    "IGUI_PZBI_PanelFilter": "Filter",
+    "IGUI_PZBI_PanelClear": "Clear",
+    "IGUI_PZBI_PanelSortName": "Sort by name",
+    "IGUI_PZBI_PanelSortQty": "Sort by quantity"
 }

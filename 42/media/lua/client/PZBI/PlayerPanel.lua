@@ -1,10 +1,10 @@
 -- PZBase Inventory (cliente): painel do jogador (especificação, seção 7).
--- Mostra a mochila e os contêineres a que o jogador tem acesso (dono da base ou inscrito),
--- com estado da inscrição, data do último instantâneo, itens agrupados por categoria e peso.
+-- Duas colunas: contêineres (esquerda) e itens por categoria (direita). Busca por nome e ordenação.
+-- Mostra a mochila e os contêineres a que o jogador tem acesso (dono da base ou inscrito).
 -- Regras puras em shared/PZBI/PlayerPanelRules.lua. Textos em IG_UI.json.
--- Exporta o texto para Zomboid/Lua/PZBI_inventario.txt.
--- Status: NÃO testado em jogo. APIs de item (ScriptManager, getDisplayCategory, getActualWeight)
---         e ISRichTextPanel/getFileWriter precisam de confirmação; as chamadas de item estão em pcall.
+-- Exporta a lista completa (sem filtro) para Zomboid/Lua/PZBI_inventario.txt.
+-- Status: NÃO testado em jogo. APIs de item (ScriptManager, getDisplayCategory, getActualWeight),
+--         ISRichTextPanel, ISTextEntryBox e getFileWriter precisam de confirmação; as de item estão em pcall.
 -- Limitação: contêineres só entram no índice após o primeiro instantâneo (feito pelo painel de contêiner).
 
 require "PZBI/Config"
@@ -12,15 +12,20 @@ require "PZBI/ContainerRules"
 require "PZBI/PlayerPanelRules"
 require "ISUI/ISCollapsableWindow"
 require "ISUI/ISRichTextPanel"
+require "ISUI/ISTextEntryBox"
 require "ISUI/ISButton"
 
 PZBI = PZBI or {}
 PZBI.PlayerPanel = PZBI.PlayerPanel or {}
 local Panel = PZBI.PlayerPanel
+local R = PZBI.PlayerPanelRules
 
 local CONTAINERS_KEY = PZBI.MOD_DATA_KEY .. "_containers"
 local EXPORT_FILE = "PZBI_inventario.txt"
-local WIN_W, WIN_H = 580, 470
+local WIN_W, WIN_H = 720, 500
+local LEFT_W = 240
+local TOP_Y = 60          -- linha dos botões de ordenação; busca fica na linha acima
+local COL_Y = 95
 
 -- Categoria traduzida se houver texto (IGUI_ItemCat_<cat>); senão, o nome cru.
 local function categoryLabel(cat)
@@ -106,7 +111,7 @@ local function containerData(player, labels)
             table.insert(containers, {
                 location = place,
                 state = state,
-                days = PZBI.PlayerPanelRules.daysSince(record.updatedAtMs, nowMs),
+                days = R.daysSince(record.updatedAtMs, nowMs),
             })
             for _, it in ipairs(record.items or {}) do
                 local info = typeInfo(it.type)
@@ -143,13 +148,6 @@ local function buildLabels()
     }
 end
 
-local function buildReport(player, labels)
-    local containers, entries = containerData(player, labels)
-    for _, e in ipairs(backpackEntries(player, labels)) do table.insert(entries, e) end
-    local groups = PZBI.PlayerPanelRules.groupByCategory(entries)
-    return PZBI.PlayerPanelRules.buildText(getText("IGUI_PZBI_PanelTitle"), containers, groups, labels)
-end
-
 local function exportReport(text)
     local ok, writer = pcall(getFileWriter, EXPORT_FILE, true, false)
     if not ok or not writer then return false end
@@ -158,10 +156,32 @@ local function exportReport(text)
     return true
 end
 
+-- Redesenha as duas colunas a partir dos dados guardados, aplicando busca e ordenação.
+local function refresh()
+    local data = Panel.data
+    if not data or not Panel.window then return end
+    local visible = R.filterEntries(data.entries, Panel.query)
+    local groups = R.groupByCategory(visible, Panel.sortKey)
+    local containers = R.sortContainers(data.containers)
+    Panel.leftPanel:setText(R.containersText(containers, data.labels))
+    Panel.rightPanel:setText(R.itemsText(groups, data.labels))
+end
+
+local function addButton(win, x, y, w, title, onClick)
+    local btn = ISButton:new(x, y, w, 25, title, nil, onClick)
+    btn:initialise()
+    win:addChild(btn)
+    return btn
+end
+
 -- Abre (ou atualiza) a janela do painel.
 function Panel.open(player)
     local labels = buildLabels()
-    local text = buildReport(player, labels)
+    local containers, entries = containerData(player, labels)
+    for _, e in ipairs(backpackEntries(player, labels)) do table.insert(entries, e) end
+    Panel.data = { containers = containers, entries = entries, labels = labels, player = player }
+    Panel.query = ""
+    Panel.sortKey = R.SORT_NAME
 
     if Panel.window then
         Panel.window:removeFromUIManager()
@@ -178,22 +198,59 @@ function Panel.open(player)
     win.title = getText("IGUI_PZBI_PanelTitle")
     Panel.window = win
 
-    local rich = ISRichTextPanel:new(10, 30, WIN_W - 20, WIN_H - 80)
-    rich:initialise()
-    rich:instantiate()
-    rich.autosetheight = false
-    rich:addScrollBars()
-    rich:setText(text)
-    win:addChild(rich)
+    -- Busca: campo + filtrar + limpar.
+    local search = ISTextEntryBox:new("", 10, 30, 340, 25)
+    search:initialise()
+    search:instantiate()
+    win:addChild(search)
+    Panel.search = search
+    addButton(win, 360, 30, 100, getText("IGUI_PZBI_PanelFilter"), function()
+        Panel.query = search:getText() or ""
+        refresh()
+    end)
+    addButton(win, 470, 30, 100, getText("IGUI_PZBI_PanelClear"), function()
+        search:setText("")
+        Panel.query = ""
+        refresh()
+    end)
 
-    local btn = ISButton:new(10, WIN_H - 40, 180, 25, getText("IGUI_PZBI_PanelExport"), nil,
-        function()
-            if exportReport(text) then
-                player:Say(getText("IGUI_PZBI_PanelExported", EXPORT_FILE))
-            else
-                player:Say(getText("IGUI_PZBI_PanelExportFailed"))
-            end
-        end)
-    btn:initialise()
-    win:addChild(btn)
+    -- Ordenação dos itens dentro de cada categoria.
+    addButton(win, 10, TOP_Y, 150, getText("IGUI_PZBI_PanelSortName"), function()
+        Panel.sortKey = R.SORT_NAME
+        refresh()
+    end)
+    addButton(win, 170, TOP_Y, 150, getText("IGUI_PZBI_PanelSortQty"), function()
+        Panel.sortKey = R.SORT_QUANTITY
+        refresh()
+    end)
+
+    -- Coluna esquerda: contêineres. Coluna direita: itens por categoria.
+    local leftPanel = ISRichTextPanel:new(10, COL_Y, LEFT_W, WIN_H - COL_Y - 60)
+    leftPanel:initialise()
+    leftPanel:instantiate()
+    leftPanel.autosetheight = false
+    leftPanel:addScrollBars()
+    win:addChild(leftPanel)
+    Panel.leftPanel = leftPanel
+
+    local rightPanel = ISRichTextPanel:new(10 + LEFT_W + 10, COL_Y, WIN_W - LEFT_W - 40, WIN_H - COL_Y - 60)
+    rightPanel:initialise()
+    rightPanel:instantiate()
+    rightPanel.autosetheight = false
+    rightPanel:addScrollBars()
+    win:addChild(rightPanel)
+    Panel.rightPanel = rightPanel
+
+    addButton(win, 10, WIN_H - 40, 180, getText("IGUI_PZBI_PanelExport"), function()
+        local full = R.buildText(getText("IGUI_PZBI_PanelTitle"),
+            R.sortContainers(Panel.data.containers),
+            R.groupByCategory(Panel.data.entries, Panel.sortKey), labels)
+        if exportReport(full) then
+            player:Say(getText("IGUI_PZBI_PanelExported", EXPORT_FILE))
+        else
+            player:Say(getText("IGUI_PZBI_PanelExportFailed"))
+        end
+    end)
+
+    refresh()
 end

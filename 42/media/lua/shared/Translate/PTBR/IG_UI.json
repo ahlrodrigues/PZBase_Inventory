@@ -49,5 +49,9 @@
     "IGUI_PZBI_PanelStatePending": "aprovação pendente",
     "IGUI_PZBI_PanelExport": "Exportar texto",
     "IGUI_PZBI_PanelExported": "Lista exportada em Zomboid/Lua/%1.",
-    "IGUI_PZBI_PanelExportFailed": "Não foi possível exportar a lista."
+    "IGUI_PZBI_PanelExportFailed": "Não foi possível exportar a lista.",
+    "IGUI_PZBI_PanelFilter": "Filtrar",
+    "IGUI_PZBI_PanelClear": "Limpar",
+    "IGUI_PZBI_PanelSortName": "Ordenar por nome",
+    "IGUI_PZBI_PanelSortQty": "Ordenar por quantidade"
 }

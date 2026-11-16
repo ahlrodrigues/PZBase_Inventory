@@ -139,3 +139,12 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Clique em "Exportar texto": a fala deve indicar Zomboid/Lua/PZBI_inventario.txt, e o arquivo deve existir com o mesmo texto.
 - Pontos a confirmar: peso e categoria vêm de APIs do jogo (podem aparecer como "peso desconhecido" ou "Outros"); a janela usa ISRichTextPanel.
 - Contêineres só aparecem depois do primeiro instantâneo (ao fechar o inventário dele).
+
+## Teste 15 (v0.2.11): busca e ordenação no painel
+
+- Abra "Painel do jogador" com itens na mochila e em contêiner.
+- Esquerda: contêineres. Direita: itens por categoria.
+- Digite parte de um nome no campo e clique em "Filtrar": só os itens com esse nome devem aparecer; "Limpar" volta a lista completa.
+- "Ordenar por quantidade": dentro de cada categoria, o maior número de unidades vem primeiro.
+- Exportar: o arquivo deve conter a lista completa, mesmo com filtro ativo.
+- Pontos a confirmar: ISTextEntryBox (getText) e ISRichTextPanel no jogo.
