@@ -61,6 +61,7 @@ function T.cancel()
     T.startX, T.startY, T.endX, T.endY = nil, nil, nil, nil
     setWorldMenu(true)
     if T.nameWindow then T.nameWindow:close() end
+    PZBI.clearHighlight()
 end
 
 function T.startCreate(player)
@@ -78,6 +79,7 @@ function T.startDelete(player)
     T.playerNum = player:getPlayerNum()
     T.z = player:getZ()
     T.mode = "delete"
+    PZBI.setHighlight(PZBI.listBases(), nil)
     say("Clique numa área sua para apagá-la.")
 end
 
