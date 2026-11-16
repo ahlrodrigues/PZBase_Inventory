@@ -1,22 +1,16 @@
--- PZBase Inventory (cliente): instantâneo do contêiner e botões na janela do contêiner.
--- Envia o instantâneo ao fechar a janela (hook em setVisible) e oferece, para contêineres dentro de base:
---   - "Atualizar instantâneo": envia o estado atual sem fechar a janela;
---   - "Ver no painel do jogador": abre o painel filtrado por este contêiner.
--- Achado no código do jogo: ISPanel:close() apenas chama self:setVisible(false), e a
--- janela de contêiner também pode ser escondida direto com setVisible(false).
--- Por isso o hook fica em setVisible, que cobre os dois caminhos.
--- Validado em jogo (v0.1.4): contêineres de mundo (móveis) retornam grid e objeto pai.
+-- PZBase Inventory (cliente): envio do instantâneo dos contêineres de base.
+-- O instantâneo é enviado ao fechar a janela de um contêiner dentro de base (hook em setVisible).
+-- Não há mais botões nem painel na janela do contêiner: toda a interação fica no inventário do personagem
+-- (botão Bases, ver BasesWindow.lua).
+-- Janelas de lista criadas pelo próprio mod (flag pzbiList) são ignoradas aqui.
 -- Ainda não lidos: contêineres de veículo e o inventário do jogador (sem posição).
--- Status dos botões: NÃO testado em jogo (posição e tamanho na janela).
+-- Status: envio validado em jogo (versões anteriores); hook após v0.2.18 NÃO testado.
 
 require "PZBI/Config"
 require "PZBI/ContainerRules"
-require "ISUI/ISButton"
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"
-local BTN_H = 22
-local BTN_W = 170
 
 -- Monta a lista agregada de itens: { ["Base.Apple"] = 3, ... }
 local function collectItems(container)
@@ -74,52 +68,11 @@ end
 -- Exposto para o BasesWindow.lua (varredura das bases).
 PZBI.sendSnapshot = sendSnapshot
 
-local function currentContainer(page)
-    return page.inventoryPane and page.inventoryPane.inventory
-end
-
--- Cria os dois botões uma vez por janela.
-local function ensureButtons(page)
-    if page.pzbiButtons then return end
-
-    local snapshotBtn = ISButton:new(10, 0, BTN_W, BTN_H, getText("IGUI_PZBI_ContainerSnapshot"), nil, function()
-        sendSnapshot(page.player, currentContainer(page))
-    end)
-    snapshotBtn:initialise()
-    page:addChild(snapshotBtn)
-
-    local panelBtn = ISButton:new(10 + BTN_W + 8, 0, BTN_W, BTN_H, getText("IGUI_PZBI_ContainerPanel"), nil, function()
-        local info = worldInfo(currentContainer(page))
-        if not insideBase(info) then return end
-        local playerObj = getSpecificPlayer(page.player)
-        if not playerObj then return end
-        local key = PZBI.ContainerRules.containerKey(info.x, info.y, info.z, info.objectType)
-        PZBI.PlayerPanel.openFiltered(playerObj, key)
-    end)
-    panelBtn:initialise()
-    page:addChild(panelBtn)
-
-    page.pzbiButtons = { snapshotBtn, panelBtn }
-end
-
--- Posiciona os botões no rodapé e mostra só se o contêiner atual estiver dentro de base.
-local function updateButtons(page)
-    ensureButtons(page)
-    local show = insideBase(worldInfo(currentContainer(page)))
-    local y = page:getHeight() - BTN_H - 6
-    for _, b in ipairs(page.pzbiButtons) do
-        b:setY(y)
-        b:setVisible(show)
-    end
-end
-
--- Hook: envolve setVisible sem substituí-lo. Ao esconder, envia o instantâneo; ao mostrar, atualiza os botões.
+-- Hook: envolve setVisible sem substituí-lo. Ao esconder uma janela de contêiner, envia o instantâneo.
 local originalSetVisible = ISInventoryPage.setVisible
 function ISInventoryPage:setVisible(bVisible, ...)
-    if not bVisible then
-        sendSnapshot(self.player, currentContainer(self))
-    else
-        updateButtons(self)
+    if not bVisible and not self.pzbiList then
+        sendSnapshot(self.player, self.inventoryPane and self.inventoryPane.inventory)
     end
     return originalSetVisible(self, bVisible, ...)
 end

@@ -24,10 +24,8 @@ e mostra tudo num painel só: por categoria, com quantidade, peso e localizaçã
 | 👁️ **Ver áreas** | Destaca as bases no chão e mostra um resumo | Não testado |
 | 🗑️ **Apagar base** | Clique numa área sua e confirme | Validado em jogo |
 | 📦 **Ler contêineres** | Ao fechar a janela de um contêiner dentro de base, o estado dele é registrado | Validado em jogo |
-| 🧭 **Só dentro da base** | Móveis fora de base não são lidos, não entram em inscrição nem no painel | Não testado |
-| 📋 **Painel do jogador** | Contêineres à esquerda, itens por categoria à direita, com busca, ordenação e exportação | Não testado |
-| 🔘 **Botões na janela do contêiner** | *Atualizar instantâneo* e *Ver no painel do jogador* | Não testado |
-| 🎒 **Botão Bases** | No inventário do personagem: lista os itens das bases (filtro por cidade). Duplo clique atualiza os contêineres carregados perto de você e os destaca | Não testado |
+| 🧭 **Só dentro da base** | Móveis fora de base não são lidos, não entram em inscrição nem na lista de itens | Não testado |
+| 🎒 **Botão Bases** (casinha, abaixo do chaveiro) | No inventário do personagem: lista os itens das bases (filtro por cidade). Duplo clique atualiza os contêineres carregados perto de você e os destaca | Não testado |
 | ⏳ **Inatividade do dono** | Base some depois de 30 dias sem login do dono (tempo real) | Validado em jogo (com 0,001 dia) |
 | 🔐 **Inscrições** | O dono se inscreve direto; outros jogadores pedem, e o dono aprova ou recusa | Não testado |
 | 🔔 **Aviso no login** | O dono recebe um aviso com a quantidade de pedidos pendentes | Não testado |
@@ -50,32 +48,18 @@ Regras: você tem **uma base por cidade**, e as bases não podem se sobrepor no 
 - **PZBase → Ver áreas:** destaca as suas bases e mostra um resumo.
 - **PZBase → Apagar área:** clique numa área sua; uma janela pede confirmação.
 
-### Painel do jogador
-
-**PZBase → Painel do jogador.** A janela tem duas colunas:
-
-- **Esquerda:** o botão *Todos os contêineres juntos* e a lista de todos os contêineres a que você tem acesso
-  (das suas bases ou em que está inscrito). Clicar num contêiner filtra a coluna da direita. Abaixo, o estado
-  da inscrição e a data do último instantâneo.
-- **Direita:** os itens agrupados por categoria, com quantidade e peso. Campo de busca por nome e ordenação
-  por nome ou quantidade.
-- **Exportar texto:** grava a lista completa em `Zomboid/Lua/PZBI_inventario.txt`.
-
-Sua mochila também aparece, com o local *Mochila*.
-
 ### Botão "Bases" no inventário do personagem
 
 - **Um clique:** abre a lista dos itens das bases na janela padrão do inventário. O botão *Base: todas*
   troca o filtro por cidade.
 - **Dois cliques seguidos:** varre as bases carregadas perto de você, atualiza o instantâneo de cada
   contêiner encontrado e destaca os que foram lidos. O destaque some ao fechar a lista.
+- O botão é uma casinha, colocada logo abaixo do chaveiro na coluna de bolsas do inventário.
 
-### Janela de um contêiner
+### Contêineres de base
 
-Dentro de uma base, a janela do contêiner ganha dois botões no rodapé:
-
-- **Atualizar instantâneo:** envia o estado atual sem precisar fechar a janela.
-- **Ver no painel do jogador:** abre o painel já filtrado por esse contêiner.
+Ao fechar a janela de um contêiner dentro de base, o mod envia o estado dele ao servidor. Não há botões
+na janela do contêiner: toda a interação fica no inventário do personagem.
 
 ### Inscrições
 
@@ -92,7 +76,7 @@ Só valem para contêineres dentro de base:
 
 - **Inatividade:** se o dono não entra no jogo por 30 dias, a base é removida. O relógio é o tempo real,
   porque o tempo do jogo para quando o jogo está fechado. O valor fica em `shared/PZBI/Config.lua`.
-- **Escopo:** só contêineres dentro da área de uma base são lidos (instantâneos, inscrições e painel).
+- **Escopo:** só contêineres dentro da área de uma base são lidos (instantâneos, inscrições e lista de itens).
 - **Sem loot novo:** o mod nunca gera itens. Ele mostra o que o jogo já tem nos contêineres.
 - **Servidor não confia no cliente:** todo pedido é validado antes de ser gravado.
 
@@ -139,7 +123,7 @@ e volte para `30` depois.
   media/lua/
     shared/PZBI/        regras puras e configuração
     shared/Translate/   textos (EN e PTBR, IG_UI.json)
-    client/PZBI/        interface: menu, criação, visualização, painel, botões, aviso, snapshot, atividade
+    client/PZBI/        interface: menu, criação, visualização, botão Bases, aviso, instantâneo, atividade
     server/PZBI/        validação e gravação: bases, instantâneos, inscrições, inatividade
 tests/                  testes das regras puras, fora do jogo
 docs/img/               capa e fontes (SVG) da arte

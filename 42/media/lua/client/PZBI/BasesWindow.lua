@@ -142,6 +142,8 @@ local function openList(page)
     local y = page:getY()
     local w, h = 300, 360
     local win = ISInventoryPage:new(x, y, w, h, buildItemContainer(B.filterCity), false)
+    win.pzbiList = true          -- janela de lista do mod: o hook de contêiner não a trata
+    win.player = page.player     -- a vanilla precisa do jogador para montar os botões de bolsa
     win:setVisible(true)
     win:initialise()
     win:addToUIManager()
@@ -182,17 +184,52 @@ local function onButtonClick(page)
     end
 end
 
--- Cria o botão uma vez por janela do personagem, no rodapé à esquerda.
-local function ensureButton(page)
-    if page.pzbiBasesBtn then
-        page.pzbiBasesBtn:setY(page:getHeight() - BTN_H - 6)
-        return
+-- Botão do chaveiro: a vanilla o põe na coluna de bolsas (page.backpacks), dentro de containerButtonPanel.
+local function keyringButton(page)
+    for _, cb in ipairs(page.backpacks or {}) do
+        local inv = cb.inventory
+        if inv and inv:getType() == "KeyRing" then return cb end
     end
-    local btn = ISButton:new(6, page:getHeight() - BTN_H - 6, BTN_W, BTN_H, getText("IGUI_PZBI_BasesButton"), nil, function()
+    return nil
+end
+
+-- Desenha uma casinha com retângulos (não depende de textura).
+local function drawHouse(btn)
+    local cx = btn:getWidth() / 2
+    local top = 4
+    for i = 0, 5 do
+        local half = i + 1
+        btn:drawRect(cx - half, top + i, half * 2, 1, 1, 1, 0.82, 0.4)
+    end
+    btn:drawRect(cx - 4, top + 6, 8, 7, 1, 1, 0.82, 0.4)
+    btn:drawRect(cx - 1, top + 9, 2, 4, 1, 0.12, 0.08, 0.04)
+end
+
+-- Cria o botão uma vez por janela do personagem: logo abaixo do chaveiro.
+-- Sem chaveiro, cai no rodapé à esquerda.
+local function ensureButton(page)
+    if page.pzbiBasesBtn then return end
+    local size = 22
+    local btn = ISButton:new(0, 0, size, size, "", nil, function()
         onButtonClick(page)
     end)
     btn:initialise()
-    page:addChild(btn)
+    btn.render = function(self)
+        ISButton.render(self)
+        drawHouse(self)
+    end
+
+    local key = keyringButton(page)
+    local panel = page.containerButtonPanel
+    if key and panel then
+        btn:setX(key:getX())
+        btn:setY(key:getBottom() + 4)
+        panel:addChild(btn)
+    else
+        btn:setX(6)
+        btn:setY(page:getHeight() - size - 6)
+        page:addChild(btn)
+    end
     page.pzbiBasesBtn = btn
 end
 
