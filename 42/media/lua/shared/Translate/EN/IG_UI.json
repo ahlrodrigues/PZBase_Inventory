@@ -54,5 +54,7 @@
     "IGUI_PZBI_PanelClear": "Clear",
     "IGUI_PZBI_PanelSortName": "Sort by name",
     "IGUI_PZBI_PanelSortQty": "Sort by quantity",
-    "IGUI_PZBI_PanelAllContainers": "All containers together"
+    "IGUI_PZBI_PanelAllContainers": "All containers together",
+    "IGUI_PZBI_ContainerSnapshot": "Update snapshot",
+    "IGUI_PZBI_ContainerPanel": "Show in player panel"
 }

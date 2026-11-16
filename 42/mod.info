@@ -1,5 +1,5 @@
 name=PZBase Inventory
 id=PZBaseInventory
 description=Inventário unificado por base: lista mochila, carro e contêineres das bases, com suporte a multijogador.
-modversion=0.2.15
+modversion=0.2.16
 versionMin=42.0

@@ -54,5 +54,7 @@
     "IGUI_PZBI_PanelClear": "Limpar",
     "IGUI_PZBI_PanelSortName": "Ordenar por nome",
     "IGUI_PZBI_PanelSortQty": "Ordenar por quantidade",
-    "IGUI_PZBI_PanelAllContainers": "Todos os contêineres juntos"
+    "IGUI_PZBI_PanelAllContainers": "Todos os contêineres juntos",
+    "IGUI_PZBI_ContainerSnapshot": "Atualizar instantâneo",
+    "IGUI_PZBI_ContainerPanel": "Ver no painel do jogador"
 }

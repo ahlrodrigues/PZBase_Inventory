@@ -287,3 +287,10 @@ function Panel.open(player)
 
     refresh()
 end
+
+-- Abre o painel já filtrado por um contêiner (botão na janela do contêiner).
+function Panel.openFiltered(player, ckey)
+    Panel.open(player)
+    Panel.filterKey = ckey
+    refresh()
+end

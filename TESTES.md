@@ -179,3 +179,11 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Abra um contêiner dentro de uma base e feche a janela. Esperado: instantâneo gravado (log `[PZBI] instantâneo ...`).
 - Esse contêiner aparece no painel do jogador. Os de fora não aparecem.
 - Se um cliente enviar inscrição de fora de base (não é possível pelo menu), o servidor deve logar `inscricao recusada: contêiner fora de base`.
+
+## Teste 19 (v0.2.16): botões na janela do contêiner
+
+- Abra um contêiner dentro de uma base. Esperado: no rodapé da janela, "Atualizar instantâneo" e "Ver no painel do jogador".
+- Em um contêiner fora de base (ou no seu inventário): os botões não aparecem.
+- "Atualizar instantâneo" com a janela aberta: log `[PZBI] instantâneo ...` sem fechar a janela.
+- "Ver no painel do jogador": o painel abre filtrado só nos itens desse contêiner. "Todos os contêineres juntos" volta à lista completa.
+- Pontos a confirmar: posição dos botões no rodapé (podem sobrepor a interface do jogo) e tamanho do texto.
