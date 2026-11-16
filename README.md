@@ -1,97 +1,197 @@
-# PZBase Inventory
+<p align="center"><img src="docs/img/capa.png" alt="PZ Base Inventory" width="720"></p>
 
-Mod de qualidade de vida para **Project Zomboid (Build 42)**. Lista os itens da mochila, dos contêineres de mundo e das bases marcadas pelo jogador, sem precisar abrir cada contêiner.
+# PZ Base Inventory — todos os seus itens, dentro da base
 
-**Versão atual:** 0.2.13 (`42/mod.info`)
-**Escopo atual:** single player. Multijogador está planejado, mas adiado (ver `TESTES_MULTIJOGADOR.md`).
+**Versão:** 0.2.18 · **Mod ID:** `PZBaseInventory` · **Build:** 42 · **Escopo:** single player (multijogador planejado)
+**Workshop:** a definir · **Licença:** a definir · **Documentação:** [TESTES.md](TESTES.md) · [ESPECIFICACAO.md](ESPECIFICACAO.md)
 
-## Funcionalidades
+Você montou a base perfeita: cerca dupla, plantação, gerador e comida para dois apocalipses.
+Só que os itens estão espalhados em vinte caixas, e você não lembra em qual está o martelo.
 
-| Seção da especificação | Recurso | Versão | Status |
-|---|---|---|---|
-| 2 | Marcar base arrastando no chão, com nome da cidade | 0.1.x–0.2.x | Criar e apagar validados em jogo |
-| 2 | Ver bases marcadas | 0.2.0 | Validado em jogo (teste 8) |
-| 2 | Editar a própria base | — | Não iniciado |
-| 3 | Snapshot de contêineres ao fechar a janela | 0.1.x | Validado em jogo (teste 4) |
-| 3 | Inscrição em contêiner dentro da base (direta ou com pedido) | 0.2.6, 0.2.15 | Não testado em jogo (teste 11) |
-| 3 | Dono aprova ou recusa pedidos | 0.2.8 | Não testado em jogo (teste 12) |
-| 3 | Aviso de pedidos pendentes ao entrar | 0.2.9 | Não testado em jogo (teste 13) |
-| 3 | Contêiner marcado como "removido" | — | Não iniciado |
-| 4 | Carro (veículo) | — | Não iniciado |
-| 5 | Notificar inscritos quando o contêiner muda | — | Não iniciado |
-| 6 | Inatividade do dono: base removida após N dias sem login | 0.2.4–0.2.5 | Validado em jogo (teste 10, com 0.001 dia) |
-| 7 | Painel do jogador: contêineres, itens por categoria, peso, busca, ordenação, exportação | 0.2.10–0.2.13 | Não testado em jogo (testes 14 a 16) |
-| 7 | Botão "Bases" no inventário do personagem: lista os itens das bases (filtro por base) na janela padrão; duplo clique varre os contêineres carregados perto do personagem e os destaca | 0.2.17 | Não testado em jogo (teste 20) |
-| — | Menus e textos em pt-BR e en (`IG_UI.json`) | 0.2.7 | Confirmação de carregamento pendente |
+**PZ Base Inventory** marca a área da sua base no chão, lê os contêineres que estão dentro dela
+e mostra tudo num painel só: por categoria, com quantidade, peso e localização. Sem abrir um por um.
 
-### Painel do jogador (seção 7)
+> **Estado do projeto:** em desenvolvimento. Parte das funcionalidades já foi validada em jogo e parte
+> ainda não. A coluna **Status** da tabela abaixo mostra o que é o quê.
 
-- **Coluna esquerda:** botão "Todos os contêineres juntos" e uma barra vertical com todos os contêineres a que você tem acesso (dono da base ou inscrito). Clicar num contêiner filtra a coluna da direita. Abaixo, os detalhes de estado da inscrição e data do último instantâneo.
-- **Coluna direita:** itens agrupados por categoria, com quantidade e peso. Campo de busca por nome e ordenação por nome ou quantidade.
-- **Mochila:** entra no painel como local "Mochila".
-- **Exportação:** grava a lista completa em `Zomboid/Lua/PZBI_inventario.txt`.
+---
 
-## Estrutura
+## O que faz
 
-```
-42/
-  mod.info
-  media/lua/
-    shared/PZBI/        regras puras e configuração (Config, BaseRules, InactivityRules,
-                        ContainerRules, PlayerPanelRules)
-    shared/Translate/   textos (EN e PTBR, IG_UI.json)
-    client/PZBI/        interface: menu, criação de base, visualização, painel, snapshot, aviso de login
-    server/PZBI/        validação e gravação: bases, instantâneos, inscrições, inatividade
-tests/                  testes das regras puras, fora do jogo
-TESTES.md               roteiro de testes em jogo (1 a 16)
-TESTES_MULTIJOGADOR.md  plano de testes multijogador (adiado)
-ESPECIFICACAO.md        especificação funcional
-VERIFICACAO_TECNICA.md  verificação das APIs do jogo usadas
-```
+| Recurso | Como funciona | Status |
+|---|---|---|
+| 🗺️ **Marcar a base** | Botão direito no chão → *PZBase → Criar área*. Arraste sobre o chão e dê um nome à cidade | Validado em jogo |
+| 👁️ **Ver áreas** | Destaca as bases no chão e mostra um resumo | Não testado |
+| 🗑️ **Apagar base** | Clique numa área sua e confirme | Validado em jogo |
+| 📦 **Ler contêineres** | Ao fechar a janela de um contêiner dentro de base, o estado dele é registrado | Validado em jogo |
+| 🧭 **Só dentro da base** | Móveis fora de base não são lidos, não entram em inscrição nem no painel | Não testado |
+| 📋 **Painel do jogador** | Contêineres à esquerda, itens por categoria à direita, com busca, ordenação e exportação | Não testado |
+| 🔘 **Botões na janela do contêiner** | *Atualizar instantâneo* e *Ver no painel do jogador* | Não testado |
+| 🎒 **Botão Bases** | No inventário do personagem: lista os itens das bases (filtro por cidade). Duplo clique atualiza os contêineres carregados perto de você e os destaca | Não testado |
+| ⏳ **Inatividade do dono** | Base some depois de 30 dias sem login do dono (tempo real) | Validado em jogo (com 0,001 dia) |
+| 🔐 **Inscrições** | O dono se inscreve direto; outros jogadores pedem, e o dono aprova ou recusa | Não testado |
+| 🔔 **Aviso no login** | O dono recebe um aviso com a quantidade de pedidos pendentes | Não testado |
+| 🌎 **pt-BR e en** | Menus e textos seguem o idioma do jogo | Carregamento pendente de confirmação |
 
-As regras que não dependem da API do jogo ficam em `shared/PZBI/` e são testadas com o interpretador Lua instalado no sistema.
+---
+
+## Como usar
+
+### Marcar uma base
+
+1. Botão direito no chão → **PZBase → Criar área**.
+2. Arraste sobre o chão para marcar a área. A pré-visualização aparece enquanto você arrasta.
+3. Digite o nome da cidade (até 40 caracteres) e salve.
+
+Regras: você tem **uma base por cidade**, e as bases não podem se sobrepor no mesmo andar.
+
+### Ver e apagar bases
+
+- **PZBase → Ver áreas:** destaca as suas bases e mostra um resumo.
+- **PZBase → Apagar área:** clique numa área sua; uma janela pede confirmação.
+
+### Painel do jogador
+
+**PZBase → Painel do jogador.** A janela tem duas colunas:
+
+- **Esquerda:** o botão *Todos os contêineres juntos* e a lista de todos os contêineres a que você tem acesso
+  (das suas bases ou em que está inscrito). Clicar num contêiner filtra a coluna da direita. Abaixo, o estado
+  da inscrição e a data do último instantâneo.
+- **Direita:** os itens agrupados por categoria, com quantidade e peso. Campo de busca por nome e ordenação
+  por nome ou quantidade.
+- **Exportar texto:** grava a lista completa em `Zomboid/Lua/PZBI_inventario.txt`.
+
+Sua mochila também aparece, com o local *Mochila*.
+
+### Botão "Bases" no inventário do personagem
+
+- **Um clique:** abre a lista dos itens das bases na janela padrão do inventário. O botão *Base: todas*
+  troca o filtro por cidade.
+- **Dois cliques seguidos:** varre as bases carregadas perto de você, atualiza o instantâneo de cada
+  contêiner encontrado e destaca os que foram lidos. O destaque some ao fechar a lista.
+
+### Janela de um contêiner
+
+Dentro de uma base, a janela do contêiner ganha dois botões no rodapé:
+
+- **Atualizar instantâneo:** envia o estado atual sem precisar fechar a janela.
+- **Ver no painel do jogador:** abre o painel já filtrado por esse contêiner.
+
+### Inscrições
+
+Só valem para contêineres dentro de base:
+
+- **Dono da base:** a inscrição é direta.
+- **Outro jogador:** faz um pedido. O dono recebe um aviso ao entrar no jogo e aprova ou recusa em
+  **PZBase → Pedidos de inscrição**.
+- Quando a base é apagada, os pedidos dela são removidos.
+
+---
+
+## Regras principais
+
+- **Inatividade:** se o dono não entra no jogo por 30 dias, a base é removida. O relógio é o tempo real,
+  porque o tempo do jogo para quando o jogo está fechado. O valor fica em `shared/PZBI/Config.lua`.
+- **Escopo:** só contêineres dentro da área de uma base são lidos (instantâneos, inscrições e painel).
+- **Sem loot novo:** o mod nunca gera itens. Ele mostra o que o jogo já tem nos contêineres.
+- **Servidor não confia no cliente:** todo pedido é validado antes de ser gravado.
+
+---
+
+## Instalação
+
+1. Copie a pasta `42/` deste repositório para `Zomboid/mods/PZBaseInventory/`. O resultado deve ficar
+   em `Zomboid/mods/PZBaseInventory/42/mod.info`.
+2. No jogo, abra o menu **Mods** e ative **PZBase Inventory** (também na lista de mods da save).
+3. Se você tiver outra cópia do mod com o mesmo ID, mantenha só uma.
+
+Quando estiver no Workshop, a instalação passa a ser pela assinatura do mod.
+
+---
 
 ## Testes
 
-Fora do jogo, a partir da raiz do repositório:
+**Fora do jogo** (a partir da raiz do repositório):
 
 ```sh
-lua tests/base_rules_test.lua
-lua tests/inactivity_rules_test.lua
-lua tests/container_rules_test.lua
-lua tests/player_panel_rules_test.lua
+lua tests/base_rules_test.lua            # regras de bases
+lua tests/inactivity_rules_test.lua      # inatividade
+lua tests/container_rules_test.lua       # contêineres e inscrições
+lua tests/player_panel_rules_test.lua    # painel do jogador
 ```
 
 Estado atual: 16, 7, 18 e 29 casos, todos passando.
 
-Dentro do jogo, siga o `TESTES.md`. Para o teste de inatividade, use `PZBI.INACTIVITY_DAYS = 0.001` em `Config.lua` na cópia de teste e volte para 30 depois.
+**Dentro do jogo:** siga o [TESTES.md](TESTES.md). Ele tem roteiros numerados (1 a 20), com o que
+esperar no jogo e no log. Para o teste de inatividade, use `INACTIVITY_DAYS = 0.001` na cópia de teste
+e volte para `30` depois.
 
-## Dados guardados (ModData)
+**Multijogador:** o plano está em [TESTES_MULTIJOGADOR.md](TESTES_MULTIJOGADOR.md).
 
-- `PZBaseInventory_bases` e `PZBaseInventory_base_<id>`: bases marcadas (dono, cidade, área, data de criação em ms).
-- `PZBaseInventory_players`: último login de cada jogador, em ms de tempo real.
-- `PZBaseInventory_containers`: índice dos contêineres já lidos (posição e tipo).
-- `PZBaseInventory_requests`: pedidos de inscrição pendentes.
-- Um registro por contêiner, com os itens, o instante do último snapshot e as inscrições.
+---
 
-## Regras principais
+## Como funciona por dentro
 
-- **Uma base por cidade, por jogador.** Bases não podem se sobrepor no mesmo nível.
-- **Inatividade:** o relógio é o tempo real (`getTimestampMs`), porque o tempo do jogo para quando o jogo está fechado. O dono é checado com o último login anterior ao atual.
-- **Escopo:** só contêineres dentro da área de uma base são lidos (instantâneos, inscrições e painel). Móveis fora de base não entram em nada.
-- **Inscrição:** o dono da base se inscreve direto. Outro jogador faz um pedido, que fica pendente até o dono aprovar ou recusar.
-- **Servidor não confia no cliente:** todo pedido é validado antes de ser gravado.
+```
+42/
+  mod.info
+  poster.png
+  media/lua/
+    shared/PZBI/        regras puras e configuração
+    shared/Translate/   textos (EN e PTBR, IG_UI.json)
+    client/PZBI/        interface: menu, criação, visualização, painel, botões, aviso, snapshot, atividade
+    server/PZBI/        validação e gravação: bases, instantâneos, inscrições, inatividade
+tests/                  testes das regras puras, fora do jogo
+docs/img/               capa e fontes (SVG) da arte
+```
+
+- **Cliente → servidor:** `createBase`, `removeBase`, `snapshot`, `subscribe`, `unsubscribe`,
+  `approve`, `deny` e `seen` (o aviso de atividade, enviado ao entrar e a cada hora).
+- **Dados no ModData:** `PZBaseInventory_bases`, `PZBaseInventory_base_<id>`, `PZBaseInventory_players`,
+  `PZBaseInventory_containers` (índice dos contêineres lidos), `PZBaseInventory_requests` (pedidos pendentes)
+  e um registro por contêiner, com itens, instante do último instantâneo e inscrições.
+- **Regras puras** ficam em `shared/PZBI/` e não chamam a API do jogo, por isso são testadas fora dele.
+
+---
+
+## Limitações conhecidas
+
+- **Área carregada:** só contêineres carregados perto do personagem podem ser lidos. Os distantes mantêm
+  o último instantâneo gravado.
+- **Contêineres nunca abertos:** o jogo gera o loot quando o contêiner é aberto pela primeira vez. Um contêiner
+  nunca aberto pode aparecer vazio, porque o mod não gera loot.
+- **O que não entra ainda:** o inventário do personagem e os contêineres de veículo não são lidos
+  nos instantâneos. Sua mochila entra no painel, mas só como local *Mochila*.
+- **Histórico:** contêineres lidos antes da v0.2.10 só entram no índice depois de uma nova leitura.
+- **Multijogador:** não testado. O registro de atividade depende do aviso do cliente, então precisa de teste
+  em servidor dedicado.
+
+---
 
 ## Pendências
 
-- Notificar os inscritos quando o contêiner muda (seção 5).
+- Notificar os inscritos quando o contêiner muda (seção 5 da especificação).
 - Carro e veículos (seção 4).
 - Editar a própria base (seção 2).
-- Contêiner marcado como "removido" quando o móvel some do mundo (seção 3).
-- Contêineres que já existiam antes da v0.2.10 só aparecem no painel após o primeiro snapshot.
-- Itens do inventário do jogador e contêineres de veículo ainda não são lidos pelo snapshot.
-- Confirmação em jogo das APIs de peso e categoria dos itens, e dos componentes de lista e texto do painel.
+- Marcar o contêiner como "removido" quando o móvel some do mundo (seção 3).
+- Testes em jogo dos itens marcados como *Não testado* acima, e o teste em servidor dedicado.
 
-## Histórico de versões
+---
 
-Ver o `git log`. Principais marcos: 0.1.5 diagnósticos e persistência; 0.2.0 menu PZBase; 0.2.4 inatividade em tempo real; 0.2.6 inscrições; 0.2.7 traduções; 0.2.8 aprovação de pedidos; 0.2.9 aviso no login; 0.2.10–0.2.13 painel do jogador.
+## Documentação
+
+| Arquivo | Conteúdo |
+|---|---|
+| [TESTES.md](TESTES.md) | Roteiros de teste em jogo (1 a 20), com o que esperar |
+| [TESTES_MULTIJOGADOR.md](TESTES_MULTIJOGADOR.md) | Plano de testes com dois jogadores e servidor |
+| [ESPECIFICACAO.md](ESPECIFICACAO.md) | Especificação funcional, seções 1 a 11 |
+| [VERIFICACAO_TECNICA.md](VERIFICACAO_TECNICA.md) | Conferência das APIs do jogo usadas, com a linha de código de referência |
+
+---
+
+## Créditos
+
+- **Varredura e destaque de contêineres:** a técnica foi observada no mod *Proximity Inventory*
+  (GPL-3.0). Nenhum código dele foi copiado; a implementação é própria.
+- **Capa e ícone:** arte própria, com fontes em `docs/img/src/*.svg`.
+- **Licença do mod:** a definir.

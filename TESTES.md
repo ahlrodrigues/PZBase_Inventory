@@ -197,3 +197,7 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Fechar a lista: o destaque some.
 - Contêiner de base que você nunca abriu, mas que está carregado perto de você: deve aparecer no painel e na lista (sem loot novo gerado).
 - Pontos a confirmar: setHighlighted e setHighlightColor com self.player, ISInventoryPage:new sem zoom, e se contêineres nunca abertos mostram itens.
+
+## Rodada de documentação e capa (v0.2.18)
+
+Sem mudança de código. A versão subiu só para publicar a capa (`poster=poster.png` no `mod.info`). Nenhum teste em jogo novo nesta rodada; os testes 11 a 20 continuam pendentes conforme a tabela de status do README.md.

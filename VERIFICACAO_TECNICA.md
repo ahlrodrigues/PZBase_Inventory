@@ -45,3 +45,22 @@ Ainda não feito: teste em jogo. Pontos que dependem do jogo e precisam de valid
 - Nome do tipo do objeto via `getObjectName()`.
 - Recebimento do ModData no cliente sem `ModData.request` explícito (item 7).
 - Limites de sanidade (500 tipos, 10.000 por item) são palpites iniciais.
+
+## Status das APIs usadas pelas funcionalidades novas (v0.2.18)
+
+A instalação do jogo base não está nesta máquina; só estão disponíveis mods do Workshop (ProximityInventory, CleanUI). Por isso, nenhuma linha de código do jogo base foi citada como conferida. Os trechos abaixo vêm do mod ProximityInventory, que usa as mesmas chamadas, e da verificação em jogo registrada em TESTES.md.
+
+| API | Onde aparece no mod | Fonte | Situação |
+|---|---|---|---|
+| `ISInventoryPage:new`, `setVisible`, `initialise`, `addToUIManager` | `client/PZBI/BasesWindow.lua`, `ContainerSnapshot.lua` | ProximityInventory (`client/ProximityInventory/ISInventoryPage.lua`) | Usada pelo outro mod; no PZBI, não testada em jogo (teste 20) |
+| `ItemContainer.new(tipo, nil, nil)` + `setExplored(true)` | `BasesWindow.lua` | ProximityInventory (`ProximityInventory.lua`) | Usada pelo outro mod; no PZBI, não testada (teste 20) |
+| `setOnlyAcceptCategory("none")`, `setCapacity(0)`, `instanceItem`, `AddItem` | `BasesWindow.lua` | Não localizados nos mods disponíveis | Não confirmada; teste 20 |
+| `getCell():getGridSquare`, `sq:getObjects()`, `obj:getContainer()` | `BasesWindow.lua` (varredura) | ProximityInventory (`BaseInv.findOriginContainer`) | Usada pelo outro mod; PZBI não testada (teste 20) |
+| `setHighlighted(player, on, false)`, `setHighlightColor`, `setOutlineHighlight` | `BasesWindow.lua` (destaque) | ProximityInventory (`setHighlighted`/`setHighlightColor`) | Usada pelo outro mod; PZBI não testada (teste 20) |
+| `ScriptManager.instance:getItem`, `getActualWeight`, `getDisplayCategory` | `PlayerPanel.lua` (dentro de `pcall`) | Não localizados | Não confirmada; teste 14 |
+| `ISScrollingListBox` (`addItem`, `setOnMouseDownFunction`) | `PlayerPanel.lua` | Não localizado | Não confirmada; teste 16 |
+| `ISRichTextPanel`, `ISTextEntryBox:getText` | Painel e janela de nome | Não localizados | Não confirmada; testes 14 e 15 |
+| `getFileWriter(name, true, false)` | Exportação do painel | Não localizado | Não confirmada; teste 14 |
+| `getTimestampMs()` | Registro de criação e de atividade | Usado desde v0.2.5 | Confirmada em jogo (teste 10, com 0,001 dia) |
+
+Antes de dar essas APIs como confirmadas, conferir os itens "Não confirmada" nos testes 14 a 16 e 20 e atualizar esta tabela com o resultado.

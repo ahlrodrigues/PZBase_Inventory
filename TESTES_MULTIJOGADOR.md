@@ -42,3 +42,13 @@ As bases (`createBase` / `removeBase`) estão implementadas no servidor, mas ain
 ## O que me enviar depois
 
 Para cada teste: as linhas `[PZBI]` do servidor, o resultado (sim/não) e, se não deu certo, o erro completo.
+
+## Atualização (v0.2.14–0.2.18)
+
+- O registro de atividade agora vem do aviso do cliente (`ActivityPing.lua`), não do jogador local.
+  Em servidor dedicado, o dono precisa ter entrado pelo menos uma vez com essa versão para a base não ser
+  removida pelo critério de 30 dias. Incluir no roteiro M1: entrar com o dono, sair, e conferir o log do servidor
+  com `[PZBI]` ao reentrar.
+- Pedidos de inscrição (teste 12) e o aviso no login (teste 13) só podem ser feitos com dois jogadores.
+- Botão "Bases" (teste 20) e o painel (testes 14 a 16): conferir se cada jogador vê só os contêineres
+  das bases em que tem acesso.

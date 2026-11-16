@@ -130,3 +130,19 @@ Status: especificação aprovada pelo autor. Pontos marcados como "a confirmar" 
 - ModData é a forma de guardar dados. A versão 42.20 restringiu a escrita de arquivos a `.ini`, `.cfg`, `.txt` e `.log`.
 - A versão 42.20 corrigiu uma falha que permitia criar itens arbitrários via ModData. Por isso, o servidor valida todo pedido do cliente.
 - Mods de Build 42 ficam em `42/` ou `common/`. Mods de Build 41 não funcionam sem adaptação.
+
+## Status de implementação (v0.2.18)
+
+Resumo por seção. Detalhes e roteiros de teste no [README.md](README.md) e no [TESTES.md](TESTES.md).
+
+| Seção | Implementado | Situação em jogo |
+|---|---|---|
+| 1 Conceitos | Sim | — |
+| 2 Marcação da base | Criar, ver e apagar; editar não | Criar e apagar validados; editar pendente |
+| 3 Contêineres | Snapshot, inscrição, pedidos, aprovação, aviso no login, escopo dentro da base | Snapshot validado; o resto não testado |
+| 4 Carro | Não | Pendente |
+| 5 Notificação | Não | Pendente |
+| 6 Inatividade | Sim (aviso do cliente desde v0.2.14) | Validado com 0,001 dia |
+| 7 Painel do jogador | Sim (contêineres, categorias, peso, busca, ordenação, exportação) | Não testado |
+| 8 Multijogador | Parcial (inatividade e inscrições preparadas) | Não testado |
+| 9 Casos de borda | Parcial | — |

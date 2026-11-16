@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1430"/>
+      <stop offset="0.55" stop-color="#7a2e4f"/>
+      <stop offset="0.82" stop-color="#f0823c"/>
+      <stop offset="1" stop-color="#ffc466"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#sky)"/>
+  <circle cx="1000" cy="420" r="170" fill="#ffb347" opacity="0.9"/>
+
+  <g fill="#120c1c">
+    <rect x="0" y="560" width="1280" height="80"/>
+    <polygon points="700,560 700,490 750,445 800,490 800,560"/>
+    <polygon points="1080,560 1080,480 1140,430 1200,480 1200,560"/>
+    <rect x="30" y="430" width="60" height="45" rx="6"/>
+    <rect x="46" y="475" width="7" height="85"/>
+    <rect x="78" y="475" width="7" height="85"/>
+    <circle cx="560" cy="545" r="40"/>
+    <circle cx="1240" cy="540" r="40"/>
+  </g>
+
+  <!-- caixa e área da base, à direita -->
+  <g transform="translate(738,-41) scale(0.6)">
+    <rect x="312" y="500" width="400" height="250" rx="22" fill="#c8843a" stroke="#3a2110" stroke-width="14"/>
+    <line x1="312" y1="580" x2="712" y2="580" stroke="#3a2110" stroke-width="10"/>
+    <line x1="312" y1="668" x2="712" y2="668" stroke="#3a2110" stroke-width="10"/>
+    <rect x="470" y="600" width="84" height="40" rx="8" fill="#ffd166" stroke="#3a2110" stroke-width="8"/>
+    <circle cx="390" cy="462" r="36" fill="#d9352b" stroke="#3a2110" stroke-width="8"/>
+    <path d="M390 426 q8 -30 30 -36" stroke="#2f7a2f" stroke-width="10" fill="none"/>
+    <rect x="478" y="410" width="68" height="92" rx="12" fill="#9fb4c7" stroke="#3a2110" stroke-width="8"/>
+    <rect x="590" y="440" width="18" height="70" fill="#7a4a1e" stroke="#3a2110" stroke-width="6"/>
+    <rect x="570" y="402" width="60" height="44" rx="6" fill="#55595e" stroke="#3a2110" stroke-width="8"/>
+    <rect x="186" y="430" width="652" height="400" rx="18" fill="none" stroke="#ffd166" stroke-width="8" stroke-dasharray="28 18"/>
+  </g>
+
+  <!-- título à esquerda -->
+  <g font-family="DejaVu Sans, Arial, sans-serif" font-weight="900">
+    <text x="70" y="250" font-size="150" fill="#ffd166" stroke="#120c1c" stroke-width="12" paint-order="stroke" letter-spacing="-4">PZ BASE</text>
+    <text x="70" y="360" font-size="104" fill="#fff4d6" stroke="#120c1c" stroke-width="10" paint-order="stroke">INVENTORY</text>
+  </g>
+  <text x="74" y="430" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="34" fill="#fff4d6">Inventário das bases · Project Zomboid B42</text>
+  <text x="74" y="505" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="30" fill="#ffd166">MARQUE A BASE · VEJA TUDO · ATUALIZE SEM ABRIR</text>
+</svg>
