@@ -51,8 +51,12 @@ local function onSubscribe(player, args)
     if not validTarget(args) then return end
     local user = player:getUsername()
     local base = baseAt(args)
+    if not base then
+        print("[PZBI] inscricao recusada: contêiner fora de base, de " .. user)
+        return
+    end
     local record, key = recordFor(args)
-    local status = PZBI.ContainerRules.subscribe(record, user, base and base.owner or nil)
+    local status = PZBI.ContainerRules.subscribe(record, user, base.owner)
     ModData.transmit(key)
     if status == "pendente" then
         setRequest(args, user, base)

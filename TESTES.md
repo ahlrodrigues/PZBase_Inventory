@@ -171,3 +171,11 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Com outro dono sem login (base criada por outro usuário, ou pelo mesmo usuário em outro save): esperado `[PZBI] base N removida: dono sem login ha ...`.
 - Restaure `INACTIVITY_DAYS` para 30 depois.
 - Pendente: teste em servidor dedicado com dois jogadores.
+
+## Teste 18 (v0.2.15): escopo só dentro da base
+
+- Abra um contêiner fora de qualquer base (móvel na rua) e feche a janela. Esperado: nenhum instantâneo no log.
+- Clique com o botão direito nesse móvel: o menu PZBase não deve mostrar "Inscrever neste móvel" nem "Cancelar inscrição".
+- Abra um contêiner dentro de uma base e feche a janela. Esperado: instantâneo gravado (log `[PZBI] instantâneo ...`).
+- Esse contêiner aparece no painel do jogador. Os de fora não aparecem.
+- Se um cliente enviar inscrição de fora de base (não é possível pelo menu), o servidor deve logar `inscricao recusada: contêiner fora de base`.

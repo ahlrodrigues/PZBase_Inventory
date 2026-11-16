@@ -6,6 +6,7 @@
 -- Ainda não lidos: contêineres de veículo e o inventário do jogador (sem posição).
 
 require "PZBI/Config"
+require "PZBI/ContainerRules"
 
 local CMD_MODULE = "PZBI"
 local CMD_SNAPSHOT = "snapshot"
@@ -45,6 +46,8 @@ local function sendSnapshot(playerIndex, container)
 
     local playerObj = getSpecificPlayer(playerIndex)
     if not playerObj then return end
+    -- Só contêineres dentro da área de uma base são lidos (ver ContainerRules.lua).
+    if not PZBI.ContainerRules.findOwnerBase(PZBI.listBases(), grid:getX(), grid:getY(), grid:getZ()) then return end
 
     local items = collectItems(container)
     sendClientCommand(playerObj, CMD_MODULE, CMD_SNAPSHOT, {

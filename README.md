@@ -13,7 +13,7 @@ Mod de qualidade de vida para **Project Zomboid (Build 42)**. Lista os itens da 
 | 2 | Ver bases marcadas | 0.2.0 | Validado em jogo (teste 8) |
 | 2 | Editar a própria base | — | Não iniciado |
 | 3 | Snapshot de contêineres ao fechar a janela | 0.1.x | Validado em jogo (teste 4) |
-| 3 | Inscrição em contêiner (direta ou com pedido) | 0.2.6 | Não testado em jogo (teste 11) |
+| 3 | Inscrição em contêiner dentro da base (direta ou com pedido) | 0.2.6, 0.2.15 | Não testado em jogo (teste 11) |
 | 3 | Dono aprova ou recusa pedidos | 0.2.8 | Não testado em jogo (teste 12) |
 | 3 | Aviso de pedidos pendentes ao entrar | 0.2.9 | Não testado em jogo (teste 13) |
 | 3 | Contêiner marcado como "removido" | — | Não iniciado |
@@ -77,7 +77,8 @@ Dentro do jogo, siga o `TESTES.md`. Para o teste de inatividade, use `PZBI.INACT
 
 - **Uma base por cidade, por jogador.** Bases não podem se sobrepor no mesmo nível.
 - **Inatividade:** o relógio é o tempo real (`getTimestampMs`), porque o tempo do jogo para quando o jogo está fechado. O dono é checado com o último login anterior ao atual.
-- **Inscrição:** sem dono (fora de base) ou dono do próprio contêiner, a inscrição é direta. Com outro dono, vira pedido até o dono aprovar ou recusar.
+- **Escopo:** só contêineres dentro da área de uma base são lidos (instantâneos, inscrições e painel). Móveis fora de base não entram em nada.
+- **Inscrição:** o dono da base se inscreve direto. Outro jogador faz um pedido, que fica pendente até o dono aprovar ou recusar.
 - **Servidor não confia no cliente:** todo pedido é validado antes de ser gravado.
 
 ## Pendências

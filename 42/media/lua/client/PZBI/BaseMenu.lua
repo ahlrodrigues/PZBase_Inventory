@@ -105,7 +105,7 @@ Events.OnFillWorldObjectContextMenu.Add(function(playerIndex, context, worldObje
     end)
 
     local target = containerTarget(worldObjects)
-    if target then
+    if target and PZBI.ContainerRules.findOwnerBase(PZBI.listBases(), target.x, target.y, target.z) then
         sub:addOption(getText("IGUI_PZBI_Subscribe"), nil, function()
             subscribe(player, target)
         end)

@@ -5,6 +5,8 @@
 -- O log indica primeira leitura e lista cada tipo alterado, com sinal.
 
 require "PZBI/Config"
+require "PZBI/BaseServer"
+require "PZBI/ContainerRules"
 print("[PZBI] server: SnapshotServer carregado")
 
 local CMD_MODULE = "PZBI"
@@ -58,6 +60,12 @@ local function onSnapshot(player, args)
     local ok, reason = validate(args)
     if not ok then
         print("[PZBI] snapshot rejeitado: " .. tostring(reason) .. " de " .. player:getUsername())
+        return
+    end
+
+    -- Só contêineres dentro da área de uma base são registrados.
+    if not PZBI.ContainerRules.findOwnerBase(PZBI.loadActiveBases(), args.x, args.y, args.z) then
+        print("[PZBI] snapshot fora de base ignorado de " .. player:getUsername())
         return
     end
 

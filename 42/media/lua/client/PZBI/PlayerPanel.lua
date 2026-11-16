@@ -103,9 +103,8 @@ local function containerData(player, labels)
         local subscribed = record and record.subscribers and record.subscribers[user]
         local pending = record and record.requests and record.requests[user]
 
-        if record and (isOwner or subscribed or pending) then
-            local place = base and (base.city .. " / " .. pos.objectType)
-                or (labels.outside .. " / " .. pos.objectType)
+        if base and record and (isOwner or subscribed or pending) then
+            local place = base.city .. " / " .. pos.objectType
             local state
             if isOwner then
                 state = labels.stateOwner

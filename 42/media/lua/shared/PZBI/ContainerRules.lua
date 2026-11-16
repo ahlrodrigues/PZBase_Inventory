@@ -4,7 +4,8 @@
 -- Dono do contêiner: o dono da base que contém o contêiner. Sem base, não há dono.
 -- Como o dono é derivado da base atual, remover a base deixa os contêineres sem dono automaticamente.
 -- Inscrição:
---   - sem dono (fora de base) ou dono do próprio contêiner: inscrição direta, status "aberta";
+--   - dono do próprio contêiner: inscrição direta, status "aberta";
+--   - contêineres fora de base não entram em inscrição (o servidor recusa; o cliente não oferece o menu);
 --   - com dono de outra pessoa: pedido, status "pendente", até o dono aprovar ou recusar.
 -- Depois de aprovado, record.approved[user] = true (status "aprovada" no painel).
 
