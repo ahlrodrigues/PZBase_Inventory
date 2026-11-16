@@ -41,7 +41,7 @@ local function zoneColor()
     }
 end
 
--- frames = nil mantém o destaque até clearHighlight() (modo apagar).
+-- frames = nil mantém o destaque ate clearHighlight() (modo apagar).
 function PZBI.setHighlight(bases, frames)
     highlighted = bases or {}
     persistent = frames == nil
@@ -54,7 +54,7 @@ function PZBI.clearHighlight()
     persistent = false
 end
 
--- Fala o resumo e destaca as áreas por alguns segundos.
+-- Fala o resumo e destaca as areas por alguns segundos.
 function PZBI.showBases(player)
     local bases = PZBI.listBases()
     if #bases == 0 then

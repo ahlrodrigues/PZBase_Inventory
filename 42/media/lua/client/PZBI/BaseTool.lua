@@ -1,6 +1,6 @@
--- PZBase Inventory (cliente): criar e apagar área da base, pelo submenu "PZBase".
--- Criar: arraste sobre o chão (a área aparece preenchida em tempo real). Ao soltar, abre a janela
--- para nomear e salvar. Apagar: clique numa área sua para apagá-la, com confirmação.
+-- PZBase Inventory (cliente): criar e apagar area da base, pelo submenu "PZBase".
+-- Criar: arraste sobre o chao (a area aparece preenchida em tempo real). Ao soltar, abre a janela
+-- para nomear e salvar. Apagar: clique numa area sua para apaga-la, com confirmação.
 -- Eventos globais (OnMouseDown/OnMouseMove/OnMouseUp) em vez dos eventos ...Outside de painel,
 -- porque o arrasto precisa funcionar antes de a janela de nome existir.
 -- Status: NÃO testado em jogo. APIs a validar: Events.OnMouseDown/OnMouseMove/OnMouseUp,
@@ -48,7 +48,7 @@ local function setWorldMenu(enabled)
     end
 end
 
--- Quadrado do chão sob a posição de tela informada, no andar do jogador.
+-- Quadrado do chao sob a posição de tela informada, no andar do jogador.
 local function squareAt(sx, sy)
     local wx = screenToIsoX(T.playerNum, sx, sy, T.z)
     local wy = screenToIsoY(T.playerNum, sx, sy, T.z)
@@ -70,7 +70,7 @@ function T.startCreate(player)
     T.playerNum = player:getPlayerNum()
     T.z = player:getZ()
     T.mode = "create"
-    say("Arraste no chão para marcar a área.")
+    say("Arraste no chao para marcar a area.")
 end
 
 function T.startDelete(player)
@@ -80,7 +80,7 @@ function T.startDelete(player)
     T.z = player:getZ()
     T.mode = "delete"
     PZBI.setHighlight(PZBI.listBases(), nil)
-    say("Clique numa área sua para apagá-la.")
+    say("Clique numa area sua para apaga-la.")
 end
 
 -- Janela de nome, aberta depois de soltar o arrasto.
@@ -133,7 +133,7 @@ local function openNameWindow()
         function(city)
             city = city:match("^%s*(.-)%s*$")
             if #city == 0 or #city > MAX_CITY_LENGTH then
-                say("Digite um nome de cidade com até " .. MAX_CITY_LENGTH .. " caracteres.")
+                say("Digite um nome de cidade com ate " .. MAX_CITY_LENGTH .. " caracteres.")
                 return
             end
             local area = {
@@ -180,7 +180,7 @@ local function deleteAt(x, y)
         return
     end
     if found.owner ~= T.player:getUsername() then
-        say("Só o dono pode apagar esta base.")
+        say("So o dono pode apagar esta base.")
         T.cancel()
         return
     end
@@ -223,7 +223,7 @@ Events.OnMouseUp.Add(function(x, y)
     openNameWindow()
 end)
 
--- Pré-visualização da área enquanto arrasta e enquanto nomeia.
+-- Pré-visualização da area enquanto arrasta e enquanto nomeia.
 Events.OnRenderTick.Add(function()
     if (T.mode == "create" or T.mode == "naming") and T.startX then
         local c = zoneColor()
