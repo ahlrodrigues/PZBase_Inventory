@@ -163,3 +163,11 @@ Aprovação e recusa ainda não têm interface: o dono ainda não consegue aprov
 - Os contêineres agora ficam numa barra vertical com rolagem, sem o limite de 6 botões.
 - Teste: com mais de 6 contêineres, role a barra até o último, clique nele e confira o filtro da coluna da direita.
 - Pontos a confirmar: ISScrollingListBox (setOnMouseDownFunction e addItem) e o tamanho da barra.
+
+## Teste 17 (v0.2.14): inatividade por aviso do jogador (solo e multijogador)
+
+- Com um dono de base logado, a base não deve ser removida. Confira no log que não há remoção ao entrar.
+- Com `INACTIVITY_DAYS` em 0.001 na cópia de teste: saia do jogo, espere alguns minutos e entre de novo. Esperado: a base do dono que voltou não é removida, pois o aviso ao entrar registra o login antes do próximo ciclo.
+- Com outro dono sem login (base criada por outro usuário, ou pelo mesmo usuário em outro save): esperado `[PZBI] base N removida: dono sem login ha ...`.
+- Restaure `INACTIVITY_DAYS` para 30 depois.
+- Pendente: teste em servidor dedicado com dois jogadores.

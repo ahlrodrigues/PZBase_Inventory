@@ -1,13 +1,16 @@
 -- PZBase Inventory (servidor): inatividade do dono (especificação, seção 6).
--- Registra o último login de cada jogador (tempo real, ms) e remove as bases de donos inativos.
--- Ordem ao entrar no jogo: primeiro verifica os donos (com o último login ANTERIOR), depois registra o login atual.
+-- O cliente avisa o servidor ao entrar e a cada hora (ActivityPing.lua). O servidor registra o login
+-- do jogador que enviou o aviso, e não o jogador local: assim funciona em solo e em multijogador.
+-- Ordem ao receber um aviso: primeiro verifica os donos (com o último login ANTERIOR), depois registra este.
 -- Regra pura em shared/PZBI/InactivityRules.lua. Remoção em BaseServer.lua (PZBI.removeBase).
--- Status: NÃO testado em jogo. Pendências: contêineres sem dono (seção 3) e notificação de inscritos.
+-- Status: NÃO testado em jogo nem em servidor dedicado.
 
 require "PZBI/Config"
 require "PZBI/InactivityRules"
 require "PZBI/BaseServer"
 
+local CMD_MODULE = "PZBI"
+local CMD_SEEN = "seen"
 local PLAYERS_KEY = PZBI.MOD_DATA_KEY .. "_players"
 local INDEX_KEY = PZBI.MOD_DATA_KEY .. "_bases"
 
@@ -17,15 +20,6 @@ end
 
 local function nowMs()
     return getTimestampMs()
-end
-
--- Registra o login do jogador local (chamado depois da verificação).
-local function markLocalPlayerSeen()
-    local player = getPlayer()
-    if not player then return end
-    local seen = ModData.getOrCreate(PLAYERS_KEY)
-    seen[player:getUsername()] = nowMs()
-    ModData.transmit(PLAYERS_KEY)
 end
 
 -- Remove as bases cujo dono não logou há mais de INACTIVITY_DAYS.
@@ -46,14 +40,23 @@ local function checkInactiveOwners()
     end
 end
 
--- Ao entrar no jogo: checa com o login anterior e só então registra este login.
+-- Aviso de atividade de um jogador: checa os demais com o login anterior dele, depois registra o login dele.
+local function onSeen(player)
+    checkInactiveOwners()
+    local seen = ModData.getOrCreate(PLAYERS_KEY)
+    seen[player:getUsername()] = nowMs()
+    ModData.transmit(PLAYERS_KEY)
+end
+
 Events.OnGameStart.Add(function()
     checkInactiveOwners()
-    markLocalPlayerSeen()
 end)
 
--- Durante o jogo: o dono está ativo, então registra o login e checa os demais.
 Events.EveryHours.Add(function()
-    markLocalPlayerSeen()
     checkInactiveOwners()
+end)
+
+Events.OnClientCommand.Add(function(module, command, player, args)
+    if module ~= CMD_MODULE or command ~= CMD_SEEN then return end
+    onSeen(player)
 end)
