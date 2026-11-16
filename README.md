@@ -151,7 +151,7 @@ docs/img/               capa e fontes (SVG) da arte
 - **Contêineres nunca abertos:** o jogo gera o loot quando o contêiner é aberto pela primeira vez. Um contêiner
   nunca aberto pode aparecer vazio, porque o mod não gera loot.
 - **O que não entra ainda:** o inventário do personagem e os contêineres de veículo não são lidos
-  nos instantâneos. Sua mochila entra no painel, mas só como local *Mochila*.
+  nos instantâneos, e os itens lidos ainda não aparecem no inventário do personagem (ver ERROS_EM_ABERTO.md).
 - **Histórico:** contêineres lidos antes da v0.2.10 só entram no índice depois de uma nova leitura.
 - **Multijogador:** não testado. O registro de atividade depende do aviso do cliente, então precisa de teste
   em servidor dedicado.
@@ -160,6 +160,7 @@ docs/img/               capa e fontes (SVG) da arte
 
 ## Pendências
 
+- Erros reportados em jogo na v0.2.19: ver [ERROS_EM_ABERTO.md](ERROS_EM_ABERTO.md).
 - Notificar os inscritos quando o contêiner muda (seção 5 da especificação).
 - Carro e veículos (seção 4).
 - Editar a própria base (seção 2).
