@@ -96,3 +96,9 @@ Botão direito num tile → "PZBase" → submenus:
 - **Cancelar:** aparece no submenu enquanto houver uma ação pendente.
 
 Se o clique direito deixar de abrir o menu, anote e envie o log.
+
+## Teste 10 (v0.2.4): rótulo do nome e inatividade do dono
+
+- **Rótulo:** a janela de nome mostra "Nome da cidade" (ou "City name" em inglês).
+- **Inatividade (teste rápido):** temporariamente, em `42/media/lua/shared/PZBI/Config.lua`, troque `PZBI.INACTIVITY_DAYS = 30` por `0.05` (cerca de 1,2 hora de jogo). Crie uma base, deixe o jogo rodar por algumas horas e espere o próximo ciclo. O log deve mostrar `[PZBI] base N removida: dono inativo desde ...`. Como o jogador local é marcado como ativo a cada hora, a remoção só deve ocorrer se o dono ficar sem entrar no save. **Restaure para 30 depois do teste.**
+- Se a base for removida enquanto o jogo roda normal, envie as linhas `[PZBI]` do `console.txt`.

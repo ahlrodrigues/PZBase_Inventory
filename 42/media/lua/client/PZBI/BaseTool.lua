@@ -112,6 +112,11 @@ function ISBaseNameWindow:createChildren()
     self:addChild(self.buttonCancel)
 end
 
+function ISBaseNameWindow:prerender()
+    ISPanel.prerender(self)
+    self:drawText(getText("IGUI_PZBI_CityName"), 10, 22, 1, 1, 1, 1, UIFont.Small)
+end
+
 function ISBaseNameWindow:save()
     self.onSave(self.nameEntry:getText())
 end

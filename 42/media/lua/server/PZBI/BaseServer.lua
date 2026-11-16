@@ -87,6 +87,21 @@ local function onRemove(player, args)
     print("[PZBI] base " .. target.id .. " removida por " .. player:getUsername())
 end
 
+-- Remoção compartilhada (pedido do dono ou inatividade). Mantém o registro, marcado como removido.
+function PZBI.removeBase(record, reason)
+    local index = ModData.getOrCreate(INDEX_KEY)
+    index.ids = index.ids or {}
+    local remaining = {}
+    for _, id in ipairs(index.ids) do
+        if id ~= record.id then table.insert(remaining, id) end
+    end
+    index.ids = remaining
+    record.removed = true
+    ModData.transmit(baseKey(record.id))
+    ModData.transmit(INDEX_KEY)
+    print("[PZBI] base " .. record.id .. " removida: " .. reason)
+end
+
 Events.OnClientCommand.Add(function(module, command, player, args)
     if module ~= CMD_MODULE then return end
     if command == CMD_CREATE then
