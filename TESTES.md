@@ -68,3 +68,13 @@ Para cada teste, mande:
 - **Verificação:** no `console.txt`, a linha `[PZBI] base 1 criada por <seu nome> em 'Base'`.
 - **Recusa esperada:** repita a área, ou uma área que cruze a primeira. O log deve mostrar `[PZBI] base recusada: overlap` (ou `duplicate_city`). O jogo não avisa a recusa.
 - **Cancelamento:** marque o canto 1, escolha "cancelar marcação" e depois "marcar canto 2". Deve falar "Canto 1 pendente" (ou "Marque o canto 1 primeiro").
+
+## Teste 7 (v0.1.7): marcação por arrasto
+
+Substitui o teste 6. A marcação agora é feita arrastando sobre o chão, como na área dos animais.
+
+- **Passo A:** clique com o botão direito num tile e escolha "PZBI: marcar base". Abre a janela com o campo de nome e os botões "Criar base" e "Fechar".
+- **Passo B:** arraste sobre o chão, de um tile a outro. A área deve aparecer preenchida com a cor da área dos animais.
+- **Passo C:** mantenha o nome "Base", clique em "Criar base". O personagem deve falar "Pedido de base enviado (Base)." e o log deve mostrar `[PZBI] base N criada por <seu nome> em 'Base'`.
+- **Passo D (sobreposição):** abra a ferramenta de novo, com outro nome (ex.: "Outra"), e arraste uma área que cruze a primeira. O log deve mostrar `[PZBI] base recusada: overlap`.
+- **Passo E (cidade duplicada):** repita o passo C com o mesmo nome "Base" e área diferente. O log deve mostrar `duplicate_city`.
