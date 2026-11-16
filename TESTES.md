@@ -60,3 +60,11 @@ Para cada teste, mande:
 - **Multijogador ainda não foi testado.** O teste de sincronização entre dois jogadores exige um servidor dedicado; pode ser o próximo passo.
 - Contêineres de veículo e o inventário do jogador não são lidos ainda (fora do escopo desta versão).
 - Se o log não mostrar nada no Teste 2, é provável que, em partida solo, o evento do servidor não dispare. Nesse caso, me avise: vamos ajustar o plano de testes.
+
+## Teste 6 (v0.1.6): criar base em partida solo
+
+- **Passo A:** clique com o botão direito num tile. Escolha "PZBI: marcar canto 1 da base". O personagem deve falar "Canto 1 marcado em x, y."
+- **Passo B:** clique com o botão direito em outro tile, no mesmo andar, e escolha "PZBI: marcar canto 2 e criar base". O personagem deve falar "Pedido de base enviado (Base)."
+- **Verificação:** no `console.txt`, a linha `[PZBI] base 1 criada por <seu nome> em 'Base'`.
+- **Recusa esperada:** repita a área, ou uma área que cruze a primeira. O log deve mostrar `[PZBI] base recusada: overlap` (ou `duplicate_city`). O jogo não avisa a recusa.
+- **Cancelamento:** marque o canto 1, escolha "cancelar marcação" e depois "marcar canto 2". Deve falar "Canto 1 pendente" (ou "Marque o canto 1 primeiro").
